@@ -9,8 +9,10 @@ import { t } from '../i18n';
 import { ensureButton, ensurePanel, type ButtonState } from '../ui/Frames';
 import { applySafeArea, setBackdrop } from '../ui/Layout';
 import { pixelText } from '../ui/PixelText';
+import { getApp } from './context';
 import { overlay } from './UIOverlay';
 
+const DEBUG_SCENES = ['ArtGallery', 'UIKit'];
 const BAR_W = 160;
 const BAR_X = 320 - BAR_W / 2;
 const BAR_Y = 188;
@@ -99,6 +101,10 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   private finish(): void {
-    overlay(this).transitionTo('Preload', 'Title');
+    // 디버그: ?scene=ArtGallery · UIKit 으로 바로 연다(스크린샷 · 테스트용)
+    const direct = new URLSearchParams(window.location.search).get('scene');
+    const target =
+      getApp(this).services.debug && direct && DEBUG_SCENES.includes(direct) ? direct : 'Title';
+    overlay(this).transitionTo('Preload', target);
   }
 }

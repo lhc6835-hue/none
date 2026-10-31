@@ -1,17 +1,20 @@
 // 부팅: 서비스 · 오디오를 만들고 Phaser 를 띄운다.
 
 import Phaser from 'phaser';
+import { AtlasCache } from './art/AtlasCache';
 import { AudioBus } from './audio/AudioBus';
 import { Sfx } from './audio/Sfx';
 import { RAMPS } from './art/palette';
 import { computeScreen } from './core/Screen';
 import { createServices, pickStorage } from './core/Services';
 import { setLanguage } from './i18n';
+import { ArtGalleryScene } from './scenes/ArtGalleryScene';
 import { BootScene } from './scenes/BootScene';
 import { DebugOverlay } from './scenes/DebugOverlay';
 import { HubScene } from './scenes/HubScene';
 import { PreloadScene } from './scenes/PreloadScene';
 import { TitleScene } from './scenes/TitleScene';
+import { UIKitScene } from './scenes/UIKitScene';
 import { UIOverlay } from './scenes/UIOverlay';
 import { setApp } from './scenes/context';
 import { fitCanvas } from './ui/Layout';
@@ -47,10 +50,20 @@ const game = new Phaser.Game({
   audio: { noAudio: true }, // 소리는 자체 AudioBus(ZzFX)로 낸다
   scale: { mode: Phaser.Scale.NONE },
   input: { activePointers: 3 },
-  scene: [BootScene, PreloadScene, TitleScene, HubScene, UIOverlay, DebugOverlay],
+  scene: [
+    BootScene,
+    PreloadScene,
+    TitleScene,
+    HubScene,
+    ArtGalleryScene,
+    UIKitScene,
+    UIOverlay,
+    DebugOverlay,
+  ],
 });
 
-setApp(game, { services, audio, sfx });
+const atlas = new AtlasCache(game.textures);
+setApp(game, { services, audio, sfx, atlas });
 
 game.events.once(Phaser.Core.Events.READY, () => {
   fitCanvas(game);
@@ -84,5 +97,5 @@ game.events.on(Phaser.Core.Events.POST_STEP, (_time: number, delta: number) => {
 });
 
 if (debug) {
-  (window as unknown as { __dotline: unknown }).__dotline = { game, services, audio, sfx };
+  (window as unknown as { __dotline: unknown }).__dotline = { game, services, audio, sfx, atlas };
 }

@@ -1,0 +1,138 @@
+// 자동 생성 파일 — scripts/gen-plant-looks.ts (원본: docs/07-plants-1~4.md 의 '형태 · 얼굴' · '색' 열).
+// 직접 고치지 말고 문서나 스크립트를 고친 뒤 `npx tsx scripts/gen-plant-looks.ts` 를 다시 실행한다.
+// 외형 미세 조정(eyeSpread · mouthLen · offset)과 parts 는 이 파일을 직접 고쳐도 되지만, 다시 생성하면 덮어쓴다.
+
+import type { PlantBase } from './types';
+
+export const EMBER_PLANTS: PlantBase[] = [
+  {
+    id: 'P051',
+    nameKey: 'plant.P051.name',
+    grade: 'SHADE',
+    family: 'EMBER',
+    look: {
+      body: 'POD',
+      ramps: { main: 'R7', sub: 'R1' },
+      variantRamps: { main: 'R9', sub: 'R1' },
+      parts: {},
+      face: { type: 'F04', host: 'fruit', eyeSpread: 0.6, mouthLen: 1.01 },
+    },
+  },
+  {
+    id: 'P052',
+    nameKey: 'plant.P052.name',
+    grade: 'SHADE',
+    family: 'EMBER',
+    look: {
+      body: 'FLOWER',
+      ramps: { main: 'R7', sub: 'R6' },
+      variantRamps: { main: 'R8', sub: 'R9' },
+      parts: {},
+      face: { type: 'F10', host: 'center', eyeSpread: 0.69, mouthLen: 1.06 },
+    },
+  },
+  {
+    id: 'P053',
+    nameKey: 'plant.P053.name',
+    grade: 'DEW',
+    family: 'EMBER',
+    look: {
+      body: 'STALK',
+      ramps: { main: 'R8', sub: 'R10' },
+      variantRamps: { main: 'R7', sub: 'R11' },
+      parts: {},
+      face: { type: 'F05', host: 'head', eyeSpread: 0.78, mouthLen: 1.1 },
+    },
+  },
+  {
+    id: 'P054',
+    nameKey: 'plant.P054.name',
+    grade: 'SUN',
+    family: 'EMBER',
+    look: {
+      body: 'COLUMN',
+      ramps: { main: 'R7', sub: 'R2' },
+      variantRamps: { main: 'R5', sub: 'R7' },
+      parts: {},
+      face: { type: 'F01', host: 'column', eyeSpread: 0.87, mouthLen: 1.15 },
+    },
+  },
+  {
+    id: 'P055',
+    nameKey: 'plant.P055.name',
+    grade: 'SUN',
+    family: 'EMBER',
+    look: {
+      body: 'FLOWER',
+      ramps: { main: 'R8', sub: 'R9' },
+      variantRamps: { main: 'R6', sub: 'R4' },
+      parts: {},
+      face: { type: 'F02', host: 'center', eyeSpread: 0.96, mouthLen: 1.19 },
+    },
+  },
+  {
+    id: 'P056',
+    nameKey: 'plant.P056.name',
+    grade: 'DUSK',
+    family: 'EMBER',
+    look: {
+      body: 'LILY',
+      ramps: { main: 'R7', sub: 'R3' },
+      variantRamps: { main: 'R5', sub: 'R4' },
+      parts: {},
+      face: { type: 'F01', host: 'flower', eyeSpread: 0.64, mouthLen: 0.53 },
+    },
+  },
+  {
+    id: 'P057',
+    nameKey: 'plant.P057.name',
+    grade: 'MOON',
+    family: 'EMBER',
+    look: {
+      body: 'FROND',
+      ramps: { main: 'R7', sub: 'R8', accent: 'R9' },
+      variantRamps: { main: 'R4', sub: 'R3' },
+      parts: {},
+      face: { type: 'F06', host: 'curl', eyeSpread: 0.73, mouthLen: 0.57 },
+    },
+  },
+  {
+    id: 'P058',
+    nameKey: 'plant.P058.name',
+    grade: 'STAR',
+    family: 'EMBER',
+    look: {
+      body: 'COLUMN',
+      ramps: { main: 'R6', sub: 'R1', special: 'STARGOLD' },
+      variantRamps: { main: 'R9', sub: 'R2' },
+      parts: {},
+      face: { type: 'F02', host: 'column', eyeSpread: 0.61, mouthLen: 0.6 },
+    },
+  },
+  {
+    id: 'P059',
+    nameKey: 'plant.P059.name',
+    grade: 'AURORA',
+    family: 'EMBER',
+    look: {
+      body: 'FLOWER',
+      ramps: { main: 'R9', sub: 'R8', accent: 'R7', special: 'AURORA' },
+      variantRamps: { main: 'R4', sub: 'R11' },
+      parts: {},
+      face: { type: 'F01', host: 'center', eyeSpread: 0.7, mouthLen: 0.64 },
+    },
+  },
+  {
+    id: 'P060',
+    nameKey: 'plant.P060.name',
+    grade: 'ORIGIN',
+    family: 'EMBER',
+    look: {
+      body: 'STALK',
+      ramps: { main: 'R7', sub: 'R9', accent: 'R11', special: 'ORIGIN' },
+      variantRamps: { main: 'R4', sub: 'R5' },
+      parts: {},
+      face: { type: 'F05', host: 'head', eyeSpread: 0.95, mouthLen: 0.7 },
+    },
+  },
+];

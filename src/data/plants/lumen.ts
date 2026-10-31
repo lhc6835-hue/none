@@ -1,0 +1,138 @@
+// 자동 생성 파일 — scripts/gen-plant-looks.ts (원본: docs/07-plants-1~4.md 의 '형태 · 얼굴' · '색' 열).
+// 직접 고치지 말고 문서나 스크립트를 고친 뒤 `npx tsx scripts/gen-plant-looks.ts` 를 다시 실행한다.
+// 외형 미세 조정(eyeSpread · mouthLen · offset)과 parts 는 이 파일을 직접 고쳐도 되지만, 다시 생성하면 덮어쓴다.
+
+import type { PlantBase } from './types';
+
+export const LUMEN_PLANTS: PlantBase[] = [
+  {
+    id: 'P071',
+    nameKey: 'plant.P071.name',
+    grade: 'SHADE',
+    family: 'LUMEN',
+    look: {
+      body: 'FLOWER',
+      ramps: { main: 'R9', sub: 'R1', special: 'ARCANE' },
+      variantRamps: { main: 'R3', sub: 'R4' },
+      parts: {},
+      face: { type: 'F01', host: 'center', eyeSpread: 0.6, mouthLen: 0.98 },
+    },
+  },
+  {
+    id: 'P072',
+    nameKey: 'plant.P072.name',
+    grade: 'DEW',
+    family: 'LUMEN',
+    look: {
+      body: 'BULB',
+      ramps: { main: 'R9', sub: 'R10' },
+      variantRamps: { main: 'R4', sub: 'R11' },
+      parts: {},
+      face: { type: 'F04', host: 'bulb', eyeSpread: 0.74, mouthLen: 0.84 },
+    },
+  },
+  {
+    id: 'P073',
+    nameKey: 'plant.P073.name',
+    grade: 'DEW',
+    family: 'LUMEN',
+    look: {
+      body: 'STALK',
+      ramps: { main: 'R1', sub: 'R11' },
+      variantRamps: { main: 'R4', sub: 'R9' },
+      parts: {},
+      face: { type: 'F06', host: 'head', eyeSpread: 0.83, mouthLen: 0.89 },
+    },
+  },
+  {
+    id: 'P074',
+    nameKey: 'plant.P074.name',
+    grade: 'SUN',
+    family: 'LUMEN',
+    look: {
+      body: 'CRYSTAL',
+      ramps: { main: 'R9', sub: 'R4', accent: 'R6' },
+      variantRamps: { main: 'R5', sub: 'R3' },
+      parts: {},
+      face: { type: 'F02', host: 'crystal', eyeSpread: 0.97, mouthLen: 0.75 },
+    },
+  },
+  {
+    id: 'P075',
+    nameKey: 'plant.P075.name',
+    grade: 'DUSK',
+    family: 'LUMEN',
+    look: {
+      body: 'STALK',
+      ramps: { main: 'R11', sub: 'R9' },
+      variantRamps: { main: 'R7', sub: 'R11' },
+      parts: {},
+      face: { type: 'F05', host: 'head', eyeSpread: 0.65, mouthLen: 0.8 },
+    },
+  },
+  {
+    id: 'P076',
+    nameKey: 'plant.P076.name',
+    grade: 'DUSK',
+    family: 'LUMEN',
+    look: {
+      body: 'BUSH',
+      ramps: { main: 'R4', sub: 'R6', accent: 'R9' },
+      variantRamps: { main: 'R3', sub: 'R5' },
+      parts: {},
+      face: { type: 'F10', host: 'mass', eyeSpread: 0.79, mouthLen: 0.66 },
+    },
+  },
+  {
+    id: 'P077',
+    nameKey: 'plant.P077.name',
+    grade: 'DUSK',
+    family: 'LUMEN',
+    look: {
+      body: 'FLOWER',
+      ramps: { main: 'R9', sub: 'R1' },
+      variantRamps: { main: 'R6', sub: 'R11' },
+      parts: {},
+      face: { type: 'F03', host: 'center', eyeSpread: 0.88, mouthLen: 0.71 },
+    },
+  },
+  {
+    id: 'P078',
+    nameKey: 'plant.P078.name',
+    grade: 'MOON',
+    family: 'LUMEN',
+    look: {
+      body: 'LILY',
+      ramps: { main: 'R11', sub: 'R4', special: 'SILVER' },
+      variantRamps: { main: 'R6', sub: 'R9' },
+      parts: {},
+      face: { type: 'F01', host: 'flower', eyeSpread: 0.61, mouthLen: 0.57 },
+    },
+  },
+  {
+    id: 'P079',
+    nameKey: 'plant.P079.name',
+    grade: 'STAR',
+    family: 'LUMEN',
+    look: {
+      body: 'FLOWER',
+      ramps: { main: 'R4', sub: 'R5', special: 'STARGOLD' },
+      variantRamps: { main: 'R6', sub: 'R11' },
+      parts: {},
+      face: { type: 'F12', host: 'center', eyeSpread: 0.7, mouthLen: 0.61 },
+    },
+  },
+  {
+    id: 'P080',
+    nameKey: 'plant.P080.name',
+    grade: 'ORIGIN',
+    family: 'LUMEN',
+    look: {
+      body: 'CRYSTAL',
+      ramps: { main: 'R11', sub: 'R9', special: 'ORIGIN' },
+      variantRamps: { main: 'R5', sub: 'R4' },
+      parts: {},
+      face: { type: 'F01', host: 'crystal', eyeSpread: 0.85, mouthLen: 1.1 },
+    },
+  },
+];

@@ -2,6 +2,7 @@
 
 import type Phaser from 'phaser';
 import type { AudioBus } from '../audio/AudioBus';
+import type { AtlasCache } from '../art/AtlasCache';
 import type { Sfx } from '../audio/Sfx';
 import type { Services } from '../core/Services';
 
@@ -9,6 +10,7 @@ export interface AppContext {
   services: Services;
   audio: AudioBus;
   sfx: Sfx;
+  atlas: AtlasCache;
 }
 
 const KEY = 'app';

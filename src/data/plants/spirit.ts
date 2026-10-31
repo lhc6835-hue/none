@@ -1,0 +1,148 @@
+// 자동 생성 파일 — scripts/gen-plant-looks.ts (원본: docs/07-plants-1~4.md 의 '형태 · 얼굴' · '색' 열).
+// 직접 고치지 말고 문서나 스크립트를 고친 뒤 `npx tsx scripts/gen-plant-looks.ts` 를 다시 실행한다.
+// 외형 미세 조정(eyeSpread · mouthLen · offset)과 parts 는 이 파일을 직접 고쳐도 되지만, 다시 생성하면 덮어쓴다.
+
+import type { PlantBase } from './types';
+
+export const SPIRIT_PLANTS: PlantBase[] = [
+  {
+    id: 'P091',
+    nameKey: 'plant.P091.name',
+    grade: 'SHADE',
+    family: 'SPIRIT',
+    look: {
+      body: 'FLOWER',
+      ramps: { main: 'R5', sub: 'R4', special: 'ARCANE' },
+      variantRamps: { main: 'R8', sub: 'R7' },
+      parts: {},
+      face: { type: 'F03', host: 'center', eyeSpread: 0.9, mouthLen: 0.63 },
+      translucent: true,
+    },
+  },
+  {
+    id: 'P092',
+    nameKey: 'plant.P092.name',
+    grade: 'DEW',
+    family: 'SPIRIT',
+    look: {
+      body: 'BUSH',
+      ramps: { main: 'R2', sub: 'R5' },
+      variantRamps: { main: 'R3', sub: 'R11' },
+      parts: {},
+      face: { type: 'F10', host: 'mass', eyeSpread: 0.99, mouthLen: 0.68 },
+      translucent: true,
+    },
+  },
+  {
+    id: 'P093',
+    nameKey: 'plant.P093.name',
+    grade: 'DEW',
+    family: 'SPIRIT',
+    look: {
+      body: 'WISP',
+      ramps: { main: 'R11', sub: 'R5' },
+      variantRamps: { main: 'R6', sub: 'R11' },
+      parts: { translucent: true },
+      face: { type: 'F01', host: 'body', eyeSpread: 0.67, mouthLen: 0.72 },
+      translucent: true,
+    },
+  },
+  {
+    id: 'P094',
+    nameKey: 'plant.P094.name',
+    grade: 'SUN',
+    family: 'SPIRIT',
+    look: {
+      body: 'FLOWER',
+      ramps: { main: 'R7', sub: 'R5' },
+      variantRamps: { main: 'R11', sub: 'R5' },
+      parts: {},
+      face: { type: 'F06', host: 'center', eyeSpread: 0.86, mouthLen: 1.11 },
+      translucent: true,
+    },
+  },
+  {
+    id: 'P095',
+    nameKey: 'plant.P095.name',
+    grade: 'SUN',
+    family: 'SPIRIT',
+    look: {
+      body: 'LILY',
+      ramps: { main: 'R6', sub: 'R5' },
+      variantRamps: { main: 'R4', sub: 'R11' },
+      parts: {},
+      face: { type: 'F07', host: 'flower', eyeSpread: 0.95, mouthLen: 1.16 },
+      translucent: true,
+    },
+  },
+  {
+    id: 'P096',
+    nameKey: 'plant.P096.name',
+    grade: 'DUSK',
+    family: 'SPIRIT',
+    look: {
+      body: 'FLOWER',
+      ramps: { main: 'R4', sub: 'R9' },
+      variantRamps: { main: 'R6', sub: 'R11' },
+      parts: {},
+      face: { type: 'F05', host: 'center', eyeSpread: 0.63, mouthLen: 1.2 },
+      translucent: true,
+    },
+  },
+  {
+    id: 'P097',
+    nameKey: 'plant.P097.name',
+    grade: 'MOON',
+    family: 'SPIRIT',
+    look: {
+      body: 'BONSAI',
+      ramps: { main: 'R5', sub: 'R11', special: 'SILVER' },
+      variantRamps: { main: 'R3', sub: 'R4' },
+      parts: {},
+      face: { type: 'F01', host: 'trunk', eyeSpread: 0.72, mouthLen: 0.54 },
+      translucent: true,
+    },
+  },
+  {
+    id: 'P098',
+    nameKey: 'plant.P098.name',
+    grade: 'MOON',
+    family: 'SPIRIT',
+    look: {
+      body: 'STALK',
+      ramps: { main: 'R8', sub: 'R5', special: 'ARCANE' },
+      variantRamps: { main: 'R4', sub: 'R11' },
+      parts: {},
+      face: { type: 'F04', host: 'head', eyeSpread: 0.91, mouthLen: 0.93 },
+      translucent: true,
+    },
+  },
+  {
+    id: 'P099',
+    nameKey: 'plant.P099.name',
+    grade: 'STAR',
+    family: 'SPIRIT',
+    look: {
+      body: 'FLOWER',
+      ramps: { main: 'R5', sub: 'R4', accent: 'R9', special: 'STARGOLD' },
+      variantRamps: { main: 'R1', sub: 'R11' },
+      parts: {},
+      face: { type: 'F02', host: 'center', eyeSpread: 1, mouthLen: 0.98 },
+      translucent: true,
+    },
+  },
+  {
+    id: 'P100',
+    nameKey: 'plant.P100.name',
+    grade: 'AURORA',
+    family: 'SPIRIT',
+    look: {
+      body: 'BONSAI',
+      ramps: { main: 'R5', sub: 'R4', accent: 'R11', special: 'AURORA' },
+      variantRamps: { main: 'R6', sub: 'R9' },
+      parts: {},
+      face: { type: 'F02', host: 'crown', eyeSpread: 0.8, mouthLen: 0.56 },
+      translucent: true,
+    },
+  },
+];

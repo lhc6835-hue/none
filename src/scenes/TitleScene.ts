@@ -86,6 +86,11 @@ export class TitleScene extends Phaser.Scene {
     });
 
     this.buildButtons();
+    // 디버그 단축키: G 아트 갤러리 · U UI 키트
+    if (services.debug) {
+      this.input.keyboard?.on('keydown-G', () => overlay(this).transitionTo('Title', 'ArtGallery'));
+      this.input.keyboard?.on('keydown-U', () => overlay(this).transitionTo('Title', 'UIKit'));
+    }
     pixelText(this, 632, 350, t('game.version', { version: __APP_VERSION__ }), {
       size: 9,
       color: RAMPS.R10[4],
