@@ -184,9 +184,7 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private beginNewGame(): void {
-    const state = startNewGame(getApp(this).services);
-    giveStarterKit(state);
-    getApp(this).services.autoSave.flush('newGame');
+    startNewGame(getApp(this).services, '', giveStarterKit);
     overlay(this).transitionTo('Title', 'Hub');
   }
 

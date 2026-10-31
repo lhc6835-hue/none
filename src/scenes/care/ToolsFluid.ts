@@ -10,7 +10,7 @@ import { countOf } from '../../systems/economy/Inventory';
 import { boneMeal, compost, mist, nutrient, water } from '../../systems/garden/CareTools';
 import { snack } from '../../systems/garden/CareSocial';
 import { waterRangeOf } from '../../systems/garden/Needs';
-import { LapCounter, ReversalCounter, midOf } from './gestures';
+import { LapCounter, ReversalCounter, midOf, waterLevelAfter } from './gestures';
 import { Tool, CarryTool, type Pt, type TrayEntry } from './ToolBase';
 
 // ---------- 1. 물주기 ----------
@@ -18,7 +18,7 @@ export class WaterTool extends Tool {
   readonly action = 'WATER' as const;
   readonly hint = t('care.hint.water');
   private pouring = false;
-  private level = 0;
+  private startLevel = 0;
   private startedAt = 0;
   private dropAt = 0;
   private sfxAt = 0;
@@ -28,7 +28,7 @@ export class WaterTool extends Tool {
   override down(p: Phaser.Input.Pointer): void {
     if (!this.h.overPlant(p.worldX, p.worldY, 14)) return;
     this.pouring = true;
-    this.level = this.h.plant.needs.water;
+    this.startLevel = this.h.plant.needs.water;
     this.startedAt = this.h.sc.time.now;
     this.pointer = { x: p.worldX, y: p.worldY };
     this.can = this.own(this.h.sc.add.image(0, 0, 'icon:can').setDepth(70));
@@ -37,10 +37,13 @@ export class WaterTool extends Tool {
   override move(p: Phaser.Input.Pointer): void {
     this.pointer = { x: p.worldX, y: p.worldY };
   }
-  override update(time: number, delta: number): void {
+  /** 누른 시간으로 계산한다(프레임이 느려도 같은 결과 — 손놀림은 실제 시간에 묶인다) */
+  private levelAt(now: number): number {
+    return waterLevelAfter(this.startLevel, (now - this.startedAt) / 1000, CARE.waterPerSecond);
+  }
+  override update(time: number): void {
     if (!this.pouring) return;
-    this.level += (CARE.waterPerSecond * delta) / 1000;
-    this.h.previewWater(this.level);
+    this.h.previewWater(this.levelAt(time));
     this.can?.setPosition(Math.round(this.pointer.x - 18), Math.round(this.pointer.y - 26));
     if (time > this.sfxAt) {
       this.sfxAt = time + 90;
@@ -57,7 +60,7 @@ export class WaterTool extends Tool {
     this.can?.destroy();
     this.can = undefined;
     const held = this.h.sc.time.now - this.startedAt;
-    let level = this.level;
+    let level = this.levelAt(this.h.sc.time.now);
     if (held < 260 && this.quick()) level = midOf(waterRangeOf(this.h.base));
     this.h.previewWater(null);
     this.h.perform(water(this.h.ctx(), level));

@@ -59,10 +59,16 @@ export function createServices(opts: {
 }
 
 /** 새 게임을 시작한다(기존 저장은 백업으로 한 번 남긴다). */
-export function startNewGame(services: Services, playerName = ''): GameState {
+export function startNewGame(
+  services: Services,
+  playerName = '',
+  setup?: (state: GameState) => void,
+): GameState {
   services.save.reset();
   const state = createInitialState(services.clock.now());
   state.player.name = playerName;
+  // 시작 지급품 같은 초기 설정은 첫 저장 전에 끝낸다(저장을 두 번 하면 두 번째 저장이 이전 저장의 백업을 덮는다)
+  setup?.(state);
   services.state = state;
   services.autoSave.flush('newGame');
   return state;

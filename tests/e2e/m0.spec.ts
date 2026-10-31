@@ -154,6 +154,9 @@ test.describe('M0 — 저장 · 설정', () => {
     expect(saved).not.toBeNull();
 
     await backToTitle(page);
+    // 허브에서 나올 때 저장되므로, '아니요' 뒤에도 타이틀에 도착한 시점의 저장 그대로여야 한다
+    const savedAtTitle = await page.evaluate(() => localStorage.getItem('dotline.save.v1'));
+    expect(savedAtTitle).not.toBeNull();
     await clickGame(page, 268, 332); // 새로 시작 → 확인창
     await page.waitForTimeout(500);
     expect(await visibleTexts(page, 'UIOverlay')).toContain(ko['title.newGameConfirm.title']);
@@ -168,7 +171,7 @@ test.describe('M0 — 저장 · 설정', () => {
     await page.waitForTimeout(400);
     expect(await visibleTexts(page, 'UIOverlay')).not.toContain(ko['title.newGameConfirm.title']);
     expect(await activeKeys(page)).toContain('Title'); // 장면은 그대로
-    expect(await page.evaluate(() => localStorage.getItem('dotline.save.v1'))).toBe(saved);
+    expect(await page.evaluate(() => localStorage.getItem('dotline.save.v1'))).toBe(savedAtTitle);
   });
 
   test('저장이 있을 때 "네, 새로 시작해요"를 누르면 이전 저장은 백업으로 남는다', async ({

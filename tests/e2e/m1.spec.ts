@@ -229,26 +229,33 @@ test.describe('M1 — UI 키트', () => {
     });
     await page.mouse.move(p.x - 40, p.y - 40);
     await page.mouse.move(p.x, p.y);
-    await page.waitForTimeout(700);
-    const texts = await page.evaluate(() => {
-      const sc = (
-        window.__dotline!.game as unknown as {
-          scene: {
-            getScene(k: string): {
-              children: {
-                list: { type?: string; text?: string; list?: { type?: string; text?: string }[] }[];
+    const readTexts = () =>
+      page.evaluate(() => {
+        const sc = (
+          window.__dotline!.game as unknown as {
+            scene: {
+              getScene(k: string): {
+                children: {
+                  list: {
+                    type?: string;
+                    text?: string;
+                    list?: { type?: string; text?: string }[];
+                  }[];
+                };
               };
             };
-          };
+          }
+        ).scene.getScene('UIKit');
+        const out: string[] = [];
+        for (const o of sc.children.list) {
+          if (o.type === 'Text' && o.text) out.push(o.text);
+          for (const c of o.list ?? []) if (c.type === 'Text' && c.text) out.push(c.text);
         }
-      ).scene.getScene('UIKit');
-      const out: string[] = [];
-      for (const o of sc.children.list) {
-        if (o.type === 'Text' && o.text) out.push(o.text);
-        for (const c of o.list ?? []) if (c.type === 'Text' && c.text) out.push(c.text);
-      }
-      return out;
-    });
-    expect(texts).toContain('drop');
+        return out;
+      });
+    // 느린 환경(소프트웨어 GL)에서도 흔들리지 않게, 툴팁이 뜰 때까지 기다린다
+    await expect
+      .poll(async () => (await readTexts()).includes('drop'), { timeout: 8000 })
+      .toBe(true);
   });
 });
