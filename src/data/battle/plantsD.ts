@@ -1,0 +1,231 @@
+// 전투 데이터 4/4: 폭풍 · 영혼 (P081–P100). 07-4문서.
+
+import { def, type PB } from './helpers';
+
+export const PLANTS_D: PB[] = [
+  // ===== 폭풍: 튀고 휘몰아치는 연쇄형 =====
+  def('P081', 'CHAIN', 55, 11, 1.5, 3.0, 'ELEC', {
+    targets: 3,
+    fall: 0.2,
+    fx: { shape: 'bolt', color: ['R9', 4], color2: ['R4', 4], hit: 'zap', trail: 'line' },
+  }),
+  def('P082', 'SPECIAL', 50, 6, 1.6, 2.5, 'PHYS', {
+    special: 'GUST',
+    splash: 0.8,
+    on: [{ k: 'KNOCK', amt: 0.3 }],
+    fx: {
+      shape: 'leaf',
+      color: ['R1', 4],
+      color2: ['R4', 4],
+      hit: 'puff',
+      trail: 'line',
+      cast: 'puff',
+    },
+  }),
+  def('P083', 'TRAP', 70, 22, 5, 2.5, 'ELEC', {
+    special: 'COTTON',
+    on: [{ k: 'STUN', dur: 0.3 }],
+    flags: ['AA'],
+    p: { max: 3 },
+    fx: { shape: 'spore', color: ['R11', 4], color2: ['R9', 4], hit: 'zap', trail: 'sparkle' },
+  }),
+  def('P084', 'SPECIAL', 85, 14, 8, 3.0, 'PHYS', {
+    special: 'TORNADO',
+    p: { tiles: 3, carry: 4, back: 1 },
+    fx: {
+      shape: 'leaf',
+      color: ['R2', 4],
+      color2: ['R11', 4],
+      hit: 'puff',
+      trail: 'smoke',
+      cast: 'ring',
+    },
+  }),
+  def('P085', 'SNIPE', 110, 51, 2.4, 5.0, 'ELEC', {
+    flags: ['AA'],
+    on: [{ k: 'STUN', dur: 0.3 }],
+    bloom: { kind: 'BARRAGE', dur: 4, p: { rate: 3, random: 1 } },
+    fx: {
+      shape: 'bolt',
+      color: ['R9', 4],
+      color2: ['R5', 4],
+      hit: 'zap',
+      trail: 'line',
+      cast: 'flash',
+    },
+  }),
+  def('P086', 'CHAIN', 145, 20, 1.3, 3.5, 'ELEC', {
+    targets: 4,
+    fall: 0.2,
+    p: { growSec: 60, growMax: 3 },
+    bloom: { kind: 'UNLIMITED', dur: 5 },
+    fx: { shape: 'bolt', color: ['R1', 4], color2: ['R9', 4], hit: 'zap', trail: 'line' },
+  }),
+  def('P087', 'SPECIAL', 180, 25, 0, 3.0, 'ELEC', {
+    special: 'RAIN_CLOUD',
+    p: { aaDps: 25, slow: 0.4 },
+    bloom: { kind: 'CUSTOM', p: { dur: 10, slow: 0.6 } },
+    fx: {
+      shape: 'drop',
+      color: ['R11', 3],
+      color2: ['R4', 4],
+      hit: 'splash',
+      trail: 'dots',
+      cast: 'ring',
+    },
+  }),
+  def('P088', 'CHAIN', 220, 50, 1.6, 3.5, 'ELEC', {
+    targets: 12,
+    fall: 0.1,
+    p: { once: 1 },
+    bloom: { kind: 'BARRAGE', dur: 6, p: { rate: 2, unlimited: 1 } },
+    fx: {
+      shape: 'star',
+      color: ['R5', 4],
+      color2: ['R9', 4],
+      hit: 'zap',
+      trail: 'sparkle',
+      cast: 'flash',
+    },
+  }),
+  def('P089', 'SPECIAL', 275, 33, 8, 3.5, 'ELEC', {
+    special: 'THUNDER_ALL',
+    p: { strikes: 3, wetStun: 0.5 },
+    bloom: { kind: 'CUSTOM', p: { dur: 8, mul: 3, stop: 0.3 } },
+    fx: {
+      shape: 'bolt',
+      color: ['R6', 3],
+      color2: ['R4', 4],
+      hit: 'zap',
+      trail: 'sparkle',
+      cast: 'flash',
+    },
+  }),
+  def('P090', 'AURA', 380, 0, 15, 99, 'PHYS', {
+    special: 'FIRST_BREATH',
+    p: { aspd: 0.25, wave: 1.5, waveBoss: 0.5 },
+    bloom: { kind: 'CUSTOM', p: { dur: 10, slow: 0.6, aspd: 0.5 } },
+    fx: {
+      shape: 'leaf',
+      color: ['R4', 4],
+      color2: ['R9', 4],
+      hit: 'ring',
+      trail: 'sparkle',
+      cast: 'flash',
+    },
+  }),
+
+  // ===== 영혼: 저주하고 거두는 특수형 =====
+  def('P091', 'SHOOT', 50, 9, 1.1, 3.2, 'SPIRIT', {
+    flags: ['HOMING'],
+    p: { curve: 1 },
+    fx: { shape: 'wisp', color: ['R3', 4], color2: ['R5', 3], hit: 'curse', trail: 'smoke' },
+  }),
+  def('P092', 'ZONE', 75, 2, 0.5, 1.6, 'SPIRIT', {
+    on: [
+      { k: 'SHRED', amt: 2, dur: 0.7, n: 2 },
+      { k: 'SLOW', amt: 0.1, dur: 0.7 },
+    ],
+    fx: {
+      shape: 'none',
+      color: ['R12', 3],
+      color2: ['R3', 3],
+      hit: 'curse',
+      trail: 'none',
+      cast: 'ring',
+    },
+  }),
+  def('P093', 'SNIPE', 85, 38, 2.4, 5.0, 'SPIRIT', {
+    flags: ['UNTARGETABLE'],
+    fx: { shape: 'wisp', color: ['R11', 4], color2: ['R5', 4], hit: 'curse', trail: 'sparkle' },
+  }),
+  def('P094', 'SPECIAL', 110, 12, 1.0, 3.0, 'SPIRIT', {
+    special: 'REAPER',
+    p: { threshold: 0.1, nutrient: 3 },
+    bloom: { kind: 'BUFF_SELF', dur: 6, p: { threshold: 0.25 } },
+    fx: {
+      shape: 'petal',
+      color: ['R7', 3],
+      color2: ['R12', 3],
+      hit: 'curse',
+      trail: 'smoke',
+      cast: 'flash',
+    },
+  }),
+  def('P095', 'SUMMON', 110, 9, 0.8, 3.0, 'SPIRIT', {
+    flags: ['WATER_OK'],
+    p: { max: 2, hp: 87, resummon: 8, roam: 1 },
+    bloom: { kind: 'BUFF_SELF', dur: 10, p: { maxAdd: 4 } },
+    fx: {
+      shape: 'wisp',
+      color: ['R3', 4],
+      color2: ['R6', 4],
+      hit: 'curse',
+      trail: 'sparkle',
+      cast: 'puff',
+    },
+  }),
+  def('P096', 'AURA', 155, 18, 5, 2.2, 'SPIRIT', {
+    special: 'DISPEL',
+    bloom: { kind: 'CUSTOM', p: { noBuff: 10 } },
+    fx: {
+      shape: 'petal',
+      color: ['R4', 3],
+      color2: ['R5', 3],
+      hit: 'curse',
+      trail: 'sparkle',
+      cast: 'ring',
+    },
+  }),
+  def('P097', 'SPECIAL', 165, 21, 1.2, 3.5, 'SPIRIT', {
+    special: 'SHADOW_MARK',
+    p: { mark: 0.2, step: 0.05, max: 0.4 },
+    bloom: { kind: 'CUSTOM', p: { mark: 0.3, dur: 8 } },
+    fx: {
+      shape: 'orb',
+      color: ['R12', 2],
+      color2: ['R5', 3],
+      hit: 'curse',
+      trail: 'smoke',
+      cast: 'puff',
+    },
+  }),
+  def('P098', 'SUMMON', 180, 13, 0.8, 1.5, 'SPIRIT', {
+    p: { max: 2, hp: 252, resummon: 8, block: 1 },
+    bloom: { kind: 'BUFF_SELF', dur: 12, p: { maxAdd: 4, heldMark: 0.2 } },
+    fx: {
+      shape: 'wisp',
+      color: ['R5', 4],
+      color2: ['R3', 4],
+      hit: 'curse',
+      trail: 'smoke',
+      cast: 'puff',
+    },
+  }),
+  def('P099', 'SPECIAL', 220, 25, 1.5, 3.5, 'SPIRIT', {
+    special: 'TIME_FLOWER',
+    p: { period: 14, r: 3.5, slow: 0.6, slowSec: 3, ally: 0.3 },
+    bloom: { kind: 'CUSTOM', p: { dur: 3, bossSlow: 0.7 } },
+    fx: {
+      shape: 'star',
+      color: ['R11', 4],
+      color2: ['R9', 4],
+      hit: 'ring',
+      trail: 'sparkle',
+      cast: 'ring',
+    },
+  }),
+  def('P100', 'SPECIAL', 275, 30, 1.2, 3.0, 'SPIRIT', {
+    special: 'REINCARNATE',
+    p: { chance: 0.25, hpFrac: 0.3, max: 5, dps: 30 },
+    bloom: { kind: 'CUSTOM', p: { dur: 6 } },
+    fx: {
+      shape: 'wisp',
+      color: ['R3', 3],
+      color2: ['R1', 4],
+      hit: 'bloom',
+      trail: 'sparkle',
+      cast: 'flash',
+    },
+  }),
+];
