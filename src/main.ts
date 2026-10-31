@@ -22,7 +22,7 @@ import { BattleScene } from './scenes/battle/BattleScene';
 import { UIKitScene } from './scenes/UIKitScene';
 import { UIOverlay } from './scenes/UIOverlay';
 import { setApp } from './scenes/context';
-import { fitCanvas } from './ui/Layout';
+import { fitCanvas, installPointerTransform, viewSize } from './ui/Layout';
 
 const debug = new URLSearchParams(window.location.search).get('debug') === '1';
 
@@ -44,7 +44,8 @@ const applySettings = (settings: ReturnType<typeof services.settings.get>) => {
 applySettings(services.settings.get());
 services.bus.on('settings:changed', ({ settings }) => applySettings(settings));
 
-const initial = computeScreen(window.innerWidth, window.innerHeight, window.devicePixelRatio || 1);
+const view = viewSize();
+const initial = computeScreen(view.w, view.h, window.devicePixelRatio || 1, view.coarse);
 
 const game = new Phaser.Game({
   type: Phaser.AUTO,
@@ -79,6 +80,7 @@ const atlas = new AtlasCache(game.textures);
 setApp(game, { services, audio, sfx, atlas });
 
 game.events.once(Phaser.Core.Events.READY, () => {
+  installPointerTransform(game);
   fitCanvas(game);
   const refit = () => {
     fitCanvas(game);

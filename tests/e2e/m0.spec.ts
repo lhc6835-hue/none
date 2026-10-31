@@ -69,7 +69,9 @@ test.describe('M0 — 부팅 · 화면', () => {
     }) => {
       await page.setViewportSize({ width: w, height: h });
       await bootToTitle(page);
-      const expected = computeScreen(w, h, 1);
+      // 터치 환경(모바일 프로젝트)에서는 정수 배율이 화면을 너무 못 채울 때 비정수 배율로 꽉 채운다(DECISIONS 'M3(수정)')
+      const coarse = await page.evaluate(() => window.matchMedia('(pointer: coarse)').matches);
+      const expected = computeScreen(w, h, 1, coarse);
       const r = await canvasRect(page);
 
       expect(r.logicalH).toBe(360);
@@ -77,7 +79,7 @@ test.describe('M0 — 부팅 · 화면', () => {
       expect(r.logicalW).toBeGreaterThanOrEqual(640); // 안전 영역 640×360 유지
       expect(r.width).toBeCloseTo(expected.cssW, 3);
       expect(r.height).toBeCloseTo(expected.cssH, 3);
-      expect(Number.isInteger(r.width / r.logicalW)).toBe(true); // 정수 배율
+      if (Number.isInteger(expected.k)) expect(Number.isInteger(r.width / r.logicalW)).toBe(true); // 정수 배율
       expect(Number.isInteger(r.left)).toBe(true); // 반 픽셀 어긋남 없음
       expect(Number.isInteger(r.top)).toBe(true);
       expect(r.left + r.width).toBeLessThanOrEqual(w);

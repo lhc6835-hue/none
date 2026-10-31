@@ -22,7 +22,44 @@ export interface ScreenLayout {
   safeX: number;
 }
 
-export function computeScreen(winW: number, winH: number, dpr = 1): ScreenLayout {
+/** 정수 배율 대비 꽉 채우기가 이만큼 이상 커질 때만 비정수 배율을 쓴다(터치 화면 전용) */
+export const FILL_GAIN = 1.12;
+
+/**
+ * 세로로 든 터치 기기에서는 화면을 90° 돌려서 쓴다(가로 화면을 세로 화면에 눕힘).
+ * 데스크톱 브라우저의 좁은 창은 돌리지 않는다.
+ */
+export function shouldRotate(winW: number, winH: number, coarsePointer: boolean): boolean {
+  return coarsePointer && winH > winW;
+}
+
+/**
+ * allowFill: 터치 기기에서 정수 배율이 화면을 너무 못 채우면(기본 70% 안팎) 비정수 배율로 꽉 채운다.
+ * 정수 배율보다 12% 이상 커질 때만 쓰므로, 844×390 처럼 정수 배율이 잘 맞는 화면은 그대로 선명하다.
+ */
+export function computeScreen(
+  winW: number,
+  winH: number,
+  dpr = 1,
+  allowFill = false,
+): ScreenLayout {
+  const integer = computeInteger(winW, winH, dpr);
+  if (!allowFill) return integer;
+  const s = Math.min(winW / SAFE_W, winH / SAFE_H);
+  if (s < integer.cssPerPixel * FILL_GAIN) return integer;
+  const logicalW = Math.min(MAX_W, Math.max(SAFE_W, Math.floor(winW / s)));
+  return {
+    k: s * (dpr > 0 ? dpr : 1),
+    logicalW,
+    logicalH: SAFE_H,
+    cssPerPixel: s,
+    cssW: logicalW * s,
+    cssH: SAFE_H * s,
+    safeX: Math.floor((logicalW - SAFE_W) / 2),
+  };
+}
+
+function computeInteger(winW: number, winH: number, dpr: number): ScreenLayout {
   const ratio = dpr > 0 ? dpr : 1;
   const devW = winW * ratio;
   const devH = winH * ratio;

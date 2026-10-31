@@ -103,7 +103,8 @@ export class Button extends Phaser.GameObjects.Container {
 
   private handleOver(): void {
     this.hovering = true;
-    if (this.btnState === 'disabled') return;
+    // 터치는 누른 뒤에 '위에 올라옴'이 오기도 한다: 눌린 상태를 덮어쓰면 뗄 때 클릭이 사라진다
+    if (this.btnState === 'disabled' || this.btnState === 'pressed') return;
     this.applyState('hover');
     this.audio().play('ui_hover');
   }

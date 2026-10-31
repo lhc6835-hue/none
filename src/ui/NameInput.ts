@@ -29,7 +29,7 @@ export class NameInput {
     el.autocomplete = 'off';
     el.spellcheck = false;
     Object.assign(el.style, {
-      position: 'fixed',
+      position: 'absolute',
       boxSizing: 'border-box',
       textAlign: 'center',
       fontFamily: 'Galmuri11, monospace',
@@ -47,7 +47,8 @@ export class NameInput {
       e.stopPropagation(); // 게임 단축키로 새지 않게
       if (e.key === 'Enter') onEnter();
     });
-    document.body.appendChild(el);
+    // 게임 컨테이너 안에 넣어, 화면을 돌려 쓸 때 함께 돌아가게 한다
+    (document.getElementById('game') ?? document.body).appendChild(el);
     this.el = el;
     this.place();
     window.addEventListener('resize', this.onResize);
@@ -56,11 +57,11 @@ export class NameInput {
 
   place(): void {
     const canvas = this.scene.game.canvas;
-    const rect = canvas.getBoundingClientRect();
-    const k = rect.width / this.scene.scale.width; // 논리 픽셀 1칸의 CSS 크기
+    // offset* 은 변형(회전)과 무관한 컨테이너 안쪽 좌표다
+    const k = canvas.offsetWidth / this.scene.scale.width; // 논리 픽셀 1칸의 CSS 크기
     const el = this.el;
-    el.style.left = `${rect.left + (safeLeft(this.scene) + this.x) * k}px`;
-    el.style.top = `${rect.top + this.y * k}px`;
+    el.style.left = `${canvas.offsetLeft + (safeLeft(this.scene) + this.x) * k}px`;
+    el.style.top = `${canvas.offsetTop + this.y * k}px`;
     el.style.width = `${this.w * k}px`;
     el.style.height = `${this.h * k}px`;
     el.style.fontSize = `${12 * k}px`;

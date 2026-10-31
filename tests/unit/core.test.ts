@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { FakeClock, OffsetClock } from '../../src/core/Clock';
 import { EventBus } from '../../src/core/EventBus';
 import { makeRng, Rng } from '../../src/core/Rng';
-import { computeScreen } from '../../src/core/Screen';
+import { computeScreen, shouldRotate } from '../../src/core/Screen';
 import { AutoSave, AUTOSAVE_INTERVAL_MS } from '../../src/core/AutoSave';
 import { createInitialState } from '../../src/core/GameState';
 import { MemoryStorage, SaveSystem } from '../../src/core/SaveSystem';
@@ -238,5 +238,47 @@ describe('Naming — 이름 규칙 (1–8자, 한글·영문·숫자)', () => {
   it('금칙어', () => {
     expect(validateName('Fuck')).toEqual({ ok: false, error: 'banned' });
     expect(validateName('씨발1')).toEqual({ ok: false, error: 'banned' });
+  });
+});
+
+describe('휴대폰 화면 맞춤', () => {
+  it('세로로 든 터치 기기만 돌려 쓴다(데스크톱의 좁은 창은 그대로)', () => {
+    expect(shouldRotate(390, 664, true)).toBe(true);
+    expect(shouldRotate(750, 342, true)).toBe(false);
+    expect(shouldRotate(500, 900, false)).toBe(false);
+  });
+
+  it('작은 가로 화면(750×342, DPR 3): 정수 배율은 화면의 70%만 써서 꽉 채운다', () => {
+    const integer = computeScreen(750, 342, 3);
+    expect(integer.k).toBe(2);
+    expect(integer.cssH / 342).toBeLessThan(0.75);
+    const fill = computeScreen(750, 342, 3, true);
+    expect(fill.cssH).toBeCloseTo(342, 5);
+    expect(fill.cssW).toBeLessThanOrEqual(750 + 1e-6);
+    expect(fill.logicalW).toBeGreaterThanOrEqual(640);
+    expect(fill.logicalW).toBeLessThanOrEqual(800);
+  });
+
+  it('정수 배율이 이미 잘 맞는 화면(844×390, DPR 3)은 꽉 채우기를 쓰지 않는다(선명함 유지)', () => {
+    const a = computeScreen(844, 390, 3, true);
+    expect(a).toEqual(computeScreen(844, 390, 3, false));
+    expect(Number.isInteger(a.k)).toBe(true);
+  });
+
+  it('세로 화면을 돌린 크기(664×390)도 가로 화면처럼 계산된다', () => {
+    const l = computeScreen(664, 390, 3, true);
+    expect(l.cssW).toBeLessThanOrEqual(664 + 1e-6);
+    expect(l.cssH).toBeLessThanOrEqual(390 + 1e-6);
+    expect(l.cssW / 664).toBeGreaterThan(0.95);
+  });
+
+  it('데스크톱(꽉 채우기 끔)은 항상 정수 배율', () => {
+    for (const [w, h] of [
+      [1366, 768],
+      [1281, 721],
+      [1024, 768],
+    ]) {
+      expect(Number.isInteger(computeScreen(w, h, 1).k)).toBe(true);
+    }
   });
 });

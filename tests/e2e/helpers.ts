@@ -51,7 +51,10 @@ export function activeScenes(page: Page): Promise<string[]> {
   );
 }
 
-/** 논리 좌표(안전 영역 기준 640×360)를 페이지 좌표로 바꾼다. */
+/**
+ * 논리 좌표(안전 영역 기준 640×360)를 페이지 좌표로 바꾼다.
+ * 세로로 든 터치 기기에서는 화면을 90° 돌려 쓰므로(data-rot=1) 그 변환까지 반영한다.
+ */
 export async function gamePoint(
   page: Page,
   x: number,
@@ -60,9 +63,16 @@ export async function gamePoint(
   return page.evaluate(
     ([gx, gy]) => {
       const game = window.__dotline!.game;
-      const rect = game.canvas.getBoundingClientRect();
-      const k = rect.width / game.scale.width;
+      const canvas = game.canvas;
       const safeLeft = Math.floor((game.scale.width - 640) / 2);
+      if (document.documentElement.dataset.rot === '1') {
+        const k = canvas.offsetWidth / game.scale.width;
+        const ex = canvas.offsetLeft + (gx + safeLeft) * k;
+        const ey = canvas.offsetTop + gy * k;
+        return { x: window.innerWidth - ey, y: ex };
+      }
+      const rect = canvas.getBoundingClientRect();
+      const k = rect.width / game.scale.width;
       return { x: rect.left + (gx + safeLeft) * k, y: rect.top + gy * k };
     },
     [x, y] as const,
