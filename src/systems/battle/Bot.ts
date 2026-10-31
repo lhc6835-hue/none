@@ -19,7 +19,11 @@ export const defaultLoad = (speciesId: string, o: Partial<Loadout> = {}): Loadou
 });
 
 /** 한 칸이 길을 얼마나 덮는지(사거리 안 길 지점 수) */
+const COVER_CACHE = new Map<string, number>();
 function coverage(sim: BattleSim, tx: number, ty: number, range: number): number {
+  const key = `${sim.stage.id}:${tx},${ty},${range}`;
+  const hit = COVER_CACHE.get(key);
+  if (hit !== undefined) return hit;
   let n = 0;
   for (const r of sim.map.routes) {
     for (let s = 0; s < r.length; s += 0.5) {
@@ -34,6 +38,7 @@ function coverage(sim: BattleSim, tx: number, ty: number, range: number): number
       if (Math.hypot(p.x - (tx + 0.5), p.y - (ty + 0.5)) <= range) n++;
     }
   }
+  COVER_CACHE.set(key, n);
   return n;
 }
 

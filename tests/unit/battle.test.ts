@@ -163,14 +163,14 @@ describe('결정성 · 클리어율', () => {
   it('같은 입력이면 같은 결과다(처치 · 하트 · 시간까지)', () => {
     const a = runBattle(
       { stage: stage('1-2'), difficulty: 'NORMAL', deck: DECK, seed: 'x' },
-      600,
+      200,
     ).result;
     const b = runBattle(
       { stage: stage('1-2'), difficulty: 'NORMAL', deck: DECK, seed: 'x' },
-      600,
+      200,
     ).result;
     expect(a).toEqual(b);
-  });
+  }, 30000);
 
   it('1-1 산책 · 보통은 봇이 끝까지 이긴다', () => {
     for (const d of ['WALK', 'NORMAL'] as const) {

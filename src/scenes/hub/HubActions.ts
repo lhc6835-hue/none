@@ -15,6 +15,10 @@ import { overlay } from '../UIOverlay';
 import type { HubScene } from '../HubScene';
 
 export function soon(s: HubScene, feature: string): void {
+  if (feature === 'sortie') {
+    sortie(s);
+    return;
+  }
   getApp(s).sfx.play('ui_error');
   overlay(s).toast(t('hub.soon', { name: t(`hub.quick.${feature}`) }));
 }
@@ -189,4 +193,11 @@ export function afterOffline(s: HubScene, report: OfflineReport): void {
   } else {
     s.queueCeremony(300);
   }
+}
+
+/** 정원 문 · 퀵메뉴 '출격': 출격 준비 화면으로 */
+export function sortie(s: HubScene): void {
+  s.state.garden.hubPan = s.pan;
+  getApp(s).sfx.play('ui_open');
+  overlay(s).transitionTo('Hub', 'Sortie');
 }

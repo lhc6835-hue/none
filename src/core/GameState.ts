@@ -72,6 +72,16 @@ export interface GameState {
   tutorial: { step: number; done: boolean };
   /** 돌봄 숙련도(플레이어 단위, 04문서) */
   mastery: Record<string, number>;
+  /** 스테이지 진행: 최고 별 · 난이도별 클리어 횟수 · 도전 횟수 */
+  progress: Record<string, StageProgress>;
+  /** 출격 준비: 마지막으로 고른 덱(uid) · 장착한 정원사 도구 · 마지막 난이도 */
+  loadout: { deck: string[]; tools: string[]; difficulty: string };
+}
+
+export interface StageProgress {
+  stars: number;
+  tries: number;
+  clears: Record<string, number>;
 }
 
 /** 새 게임 상태. 시각은 호출하는 쪽이 Clock에서 읽어 넘긴다. */
@@ -87,6 +97,8 @@ export function createInitialState(now: number, packetSeed = 'packet-initial'): 
     flags: {},
     tutorial: { step: 0, done: false },
     mastery: {},
+    progress: {},
+    loadout: { deck: [], tools: [], difficulty: 'NORMAL' },
   };
 }
 

@@ -16,6 +16,8 @@ import { HubScene } from './scenes/HubScene';
 import { PreloadScene } from './scenes/PreloadScene';
 import { TitleScene } from './scenes/TitleScene';
 import { CareScene } from './scenes/CareScene';
+import { SortieScene } from './scenes/SortieScene';
+import { BattleScene } from './scenes/battle/BattleScene';
 import { UIKitScene } from './scenes/UIKitScene';
 import { UIOverlay } from './scenes/UIOverlay';
 import { setApp } from './scenes/context';
@@ -63,6 +65,8 @@ const game = new Phaser.Game({
     TitleScene,
     HubScene,
     CareScene,
+    SortieScene,
+    BattleScene,
     ArtGalleryScene,
     UIKitScene,
     UIOverlay,
