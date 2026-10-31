@@ -129,12 +129,44 @@ export interface Passive {
   params: Record<string, number | string | boolean>;
 }
 
-// ---- 돌봄 (M2에서 구체화) ----
-export type PersonalityId = string;
+// ---- 돌봄 (04문서) ----
+export type PersonalityId =
+  'LAID_BACK' | 'PLAYFUL' | 'SHY' | 'GLUTTON' | 'NEAT' | 'SPOILED' | 'BRAVE' | 'SLEEPY';
 export type TraitId = string;
-export type ZoneId = string;
-export type SongGenre = string;
-export type ProblemState = { kind: string; [key: string]: unknown };
+/** 온실 구역 9종 (04문서 1-1) */
+export type ZoneId =
+  | 'WINDOW'
+  | 'TABLE'
+  | 'SHADE'
+  | 'STOVE'
+  | 'TANK'
+  | 'OUTDOOR'
+  | 'MOONLIGHT'
+  | 'BREEDING'
+  | 'DORMANT';
+export type SongGenre = 'LULLABY' | 'WALTZ' | 'MARCH' | 'RAIN' | 'JAZZ' | 'MYSTIC';
+/** 저장되는 문제(곰팡이 점 · 해충 · 시든 잎 · 과습 …). 목마름 · 시무룩 같은 상태는 욕구에서 계산한다. */
+export type ProblemKind =
+  | 'MOLD'
+  | 'MOLD_DISEASE'
+  | 'PEST'
+  | 'WITHER'
+  | 'OVERWATER'
+  | 'ROOT_ROT'
+  | 'EXCESS_NUTRIENT'
+  | 'ROOTBOUND'
+  | 'TOPPLED'
+  | 'WOUND';
+export interface ProblemState {
+  kind: ProblemKind;
+  /** 생긴 시각(ms) */
+  since: number;
+  /** 곰팡이 점 · 시든 잎 위치(스프라이트 안쪽 0–1 비율) */
+  x?: number;
+  y?: number;
+  /** 해충 마릿수 */
+  n?: number;
+}
 export type DiaryEntry = { at: number; kind: string; [key: string]: unknown };
 export type Acquire = { kind: string; [key: string]: unknown };
 
@@ -209,6 +241,18 @@ export interface PlantInstance {
   shape?: 'NEAT' | 'BUSHY' | 'SPIKY';
   diary: DiaryEntry[];
   flags: Record<string, boolean>;
+  /** 끝나는 시각(ms)을 담는 타이머: vitality(생기) · growBoost(쑥쑥) · excessUntil · woundUntil … */
+  timers: Record<string, number>;
+  /** 이번 성장 단계에서 쓴 영양제 · 뼛가루 수(과다 판정) */
+  stageDoses: { nutrient: number; bone: number };
+  /** 분무한 시각 기록(1분 8회 초과 판정) */
+  mistLog: number[];
+  /** 마지막 쓰다듬기 · 말 걸기 · 간식 시각(반복 효과 감소 · 쿨다운) */
+  lastCare: Record<string, number>;
+  /** 오늘(현지 날짜) 얻은 애정도 */
+  affectionDay: string;
+  /** 심은 시각 */
+  plantedAt: number;
   /** 오프라인 계산 기준 시각(ms) */
   lastUpdated: number;
 }

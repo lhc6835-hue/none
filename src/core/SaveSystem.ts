@@ -5,7 +5,7 @@
 //  - 내보내기 · 가져오기: base64(JSON)
 
 import { crc32 } from './crc32';
-import { SAVE_VERSION, type GameState } from './GameState';
+import { normalizeState, SAVE_VERSION, type GameState } from './GameState';
 import { MIGRATIONS, migrateState, type MigrationTable } from './migrations';
 
 export const SAVE_KEY = 'dotline.save.v1';
@@ -107,7 +107,7 @@ export class SaveSystem {
     if (env.version > this.currentVersion) return { status: 'tooNew', version: env.version };
     try {
       const migrated = migrateState(env.state, env.version, this.currentVersion, this.migrations);
-      const state = migrated as GameState;
+      const state = normalizeState(migrated as GameState);
       state.version = this.currentVersion;
       return { status: 'ok', state, savedAt: env.savedAt };
     } catch {

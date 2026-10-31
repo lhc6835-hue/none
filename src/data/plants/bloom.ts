@@ -17,6 +17,7 @@ export const BLOOM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'center', eyeSpread: 0.63, mouthLen: 1.05 },
     },
+    care: { light: 3, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P032',
@@ -30,6 +31,7 @@ export const BLOOM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F02', host: 'center', eyeSpread: 0.77, mouthLen: 0.92 },
     },
+    care: { light: 3, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P033',
@@ -42,6 +44,14 @@ export const BLOOM_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R6', sub: 'R9' },
       parts: {},
       face: { type: 'F03', host: 'leaf', eyeSpread: 0.86, mouthLen: 0.96 },
+    },
+    care: {
+      light: 3,
+      water: 'HIGH',
+      temp: 'MID',
+      active: 'DAY',
+      favoriteNutrient: 'SWEET',
+      needsStake: true,
     },
   },
   {
@@ -56,6 +66,7 @@ export const BLOOM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F04', host: 'head', eyeSpread: 0.9, mouthLen: 1.19 },
     },
+    care: { light: 3, water: 'LOW', temp: 'MID', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P035',
@@ -69,6 +80,7 @@ export const BLOOM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F07', host: 'center', eyeSpread: 0.99, mouthLen: 0.53 },
     },
+    care: { light: 3, water: 'MID', temp: 'COOL', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P036',
@@ -82,6 +94,7 @@ export const BLOOM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'crown', eyeSpread: 0.72, mouthLen: 1.1 },
     },
+    care: { light: 2, water: 'MID', temp: 'COOL', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P037',
@@ -95,6 +108,7 @@ export const BLOOM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F12', host: 'mass', eyeSpread: 0.81, mouthLen: 1.14 },
     },
+    care: { light: 2, water: 'HIGH', temp: 'MID', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P038',
@@ -108,6 +122,7 @@ export const BLOOM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F09', host: 'head', eyeSpread: 0.64, mouthLen: 0.64 },
     },
+    care: { light: 1, water: 'MID', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P039',
@@ -121,6 +136,15 @@ export const BLOOM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F02', host: 'center', eyeSpread: 0.73, mouthLen: 0.69 },
     },
+    care: {
+      light: 3,
+      water: 'MID',
+      temp: 'WARM',
+      active: 'DAY',
+      favoriteNutrient: 'SWEET',
+      music: 'JAZZ',
+      phrase: 'PRAISE',
+    },
   },
   {
     id: 'P040',
@@ -133,6 +157,17 @@ export const BLOOM_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R5', sub: 'R4' },
       parts: {},
       face: { type: 'F02', host: 'center', eyeSpread: 0.92, mouthLen: 0.59 },
+    },
+    care: {
+      light: 3,
+      water: 'MID',
+      temp: 'MID',
+      active: 'DAY',
+      favoriteNutrient: 'SWEET',
+      music: 'WALTZ',
+      phrase: 'CHEER',
+      needsNightExposure: true,
+      special: 'SPRING_WALTZ',
     },
   },
 ];

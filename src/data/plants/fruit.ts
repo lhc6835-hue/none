@@ -17,6 +17,7 @@ export const FRUIT_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'trunk', eyeSpread: 0.83, mouthLen: 0.55 },
     },
+    care: { light: 2, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P042',
@@ -30,6 +31,7 @@ export const FRUIT_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F10', host: 'head', eyeSpread: 0.74, mouthLen: 0.5 },
     },
+    care: { light: 3, water: 'HIGH', temp: 'MID', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P043',
@@ -42,6 +44,14 @@ export const FRUIT_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R8', sub: 'R10' },
       parts: {},
       face: { type: 'F02', host: 'fruit', eyeSpread: 0.65, mouthLen: 1.17 },
+    },
+    care: {
+      light: 3,
+      water: 'HIGH',
+      temp: 'WARM',
+      active: 'DAY',
+      favoriteNutrient: 'STRONG',
+      needsStake: true,
     },
   },
   {
@@ -56,6 +66,7 @@ export const FRUIT_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F04', host: 'fruit', eyeSpread: 0.87, mouthLen: 0.78 },
     },
+    care: { light: 3, water: 'LOW', temp: 'WARM', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P045',
@@ -69,6 +80,7 @@ export const FRUIT_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'fruit', eyeSpread: 0.78, mouthLen: 0.73 },
     },
+    care: { light: 3, water: 'MID', temp: 'WARM', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P046',
@@ -82,6 +94,7 @@ export const FRUIT_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F03', host: 'fruit', eyeSpread: 0.69, mouthLen: 0.69 },
     },
+    care: { light: 2, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P047',
@@ -95,6 +108,7 @@ export const FRUIT_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F06', host: 'fruit', eyeSpread: 0.6, mouthLen: 0.64 },
     },
+    care: { light: 3, water: 'MID', temp: 'WARM', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P048',
@@ -107,6 +121,14 @@ export const FRUIT_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R1', sub: 'R2' },
       parts: {},
       face: { type: 'F09', host: 'leaf', eyeSpread: 0.61, mouthLen: 0.94 },
+    },
+    care: {
+      light: 2,
+      water: 'MID',
+      temp: 'COOL',
+      active: 'NIGHT',
+      favoriteNutrient: 'SWEET',
+      needsStake: true,
     },
   },
   {
@@ -121,6 +143,15 @@ export const FRUIT_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'crown', eyeSpread: 0.93, mouthLen: 0.89 },
     },
+    care: {
+      light: 3,
+      water: 'MID',
+      temp: 'MID',
+      active: 'DAY',
+      favoriteNutrient: 'STRONG',
+      music: 'MARCH',
+      phrase: 'PRAISE',
+    },
   },
   {
     id: 'P050',
@@ -133,6 +164,16 @@ export const FRUIT_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R4', sub: 'R6' },
       parts: {},
       face: { type: 'F05', host: 'crown', eyeSpread: 0.92, mouthLen: 0.96 },
+    },
+    care: {
+      light: 3,
+      water: 'MID',
+      temp: 'MID',
+      active: 'DAY',
+      favoriteNutrient: 'STRONG',
+      music: 'JAZZ',
+      phrase: 'BATTLE',
+      needsNightExposure: true,
     },
   },
 ];

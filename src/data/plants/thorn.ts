@@ -17,6 +17,7 @@ export const THORN_PLANTS: PlantBase[] = [
       parts: { accentOnBloom: true },
       face: { type: 'F04', host: 'column', eyeSpread: 0.63, mouthLen: 1.08 },
     },
+    care: { light: 3, water: 'LOW', temp: 'WARM', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P012',
@@ -30,6 +31,7 @@ export const THORN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F03', host: 'bulb', eyeSpread: 0.72, mouthLen: 1.13 },
     },
+    care: { light: 2, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P013',
@@ -43,6 +45,7 @@ export const THORN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F05', host: 'crown', eyeSpread: 0.81, mouthLen: 1.17 },
     },
+    care: { light: 3, water: 'LOW', temp: 'COOL', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P014',
@@ -56,6 +59,7 @@ export const THORN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'center', eyeSpread: 1, mouthLen: 0.85 },
     },
+    care: { light: 3, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P015',
@@ -69,6 +73,7 @@ export const THORN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F06', host: 'center', eyeSpread: 0.68, mouthLen: 0.9 },
     },
+    care: { light: 3, water: 'LOW', temp: 'MID', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P016',
@@ -82,6 +87,7 @@ export const THORN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'center', eyeSpread: 0.77, mouthLen: 0.95 },
     },
+    care: { light: 3, water: 'LOW', temp: 'WARM', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P017',
@@ -95,6 +101,7 @@ export const THORN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F07', host: 'crown', eyeSpread: 0.86, mouthLen: 0.99 },
     },
+    care: { light: 3, water: 'LOW', temp: 'WARM', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P018',
@@ -108,6 +115,7 @@ export const THORN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F04', host: 'mass', eyeSpread: 0.85, mouthLen: 0.69 },
     },
+    care: { light: 2, water: 'LOW', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P019',
@@ -121,6 +129,15 @@ export const THORN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F02', host: 'center', eyeSpread: 0.94, mouthLen: 0.74 },
     },
+    care: {
+      light: 3,
+      water: 'LOW',
+      temp: 'WARM',
+      active: 'DAY',
+      favoriteNutrient: 'STRONG',
+      music: 'MARCH',
+      phrase: 'BATTLE',
+    },
   },
   {
     id: 'P020',
@@ -133,6 +150,16 @@ export const THORN_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R5', sub: 'R4' },
       parts: {},
       face: { type: 'F12', host: 'crown', eyeSpread: 0.62, mouthLen: 0.94 },
+    },
+    care: {
+      light: 3,
+      water: 'LOW',
+      temp: 'WARM',
+      active: 'DAY',
+      favoriteNutrient: 'STRONG',
+      music: 'MARCH',
+      phrase: 'PRAISE',
+      needsNightExposure: true,
     },
   },
 ];

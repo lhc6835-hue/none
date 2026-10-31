@@ -17,6 +17,7 @@ export const FUNGUS_PLANTS: PlantBase[] = [
       parts: { toxicGlow: true },
       face: { type: 'F03', host: 'cap', eyeSpread: 0.94, mouthLen: 0.9 },
     },
+    care: { light: 1, water: 'HIGH', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P022',
@@ -30,6 +31,7 @@ export const FUNGUS_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F10', host: 'cap', eyeSpread: 0.8, mouthLen: 1.03 },
     },
+    care: { light: 1, water: 'MID', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P023',
@@ -43,6 +45,7 @@ export const FUNGUS_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'cap', eyeSpread: 0.71, mouthLen: 0.99 },
     },
+    care: { light: 1, water: 'MID', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P024',
@@ -56,6 +59,7 @@ export const FUNGUS_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F07', host: 'cap', eyeSpread: 0.67, mouthLen: 0.76 },
     },
+    care: { light: 1, water: 'HIGH', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P025',
@@ -69,6 +73,7 @@ export const FUNGUS_PLANTS: PlantBase[] = [
       parts: { toxicGlow: true },
       face: { type: 'F05', host: 'mass', eyeSpread: 0.99, mouthLen: 0.71 },
     },
+    care: { light: 1, water: 'HIGH', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P026',
@@ -82,6 +87,7 @@ export const FUNGUS_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F02', host: 'pitcher', eyeSpread: 0.85, mouthLen: 0.85 },
     },
+    care: { light: 1, water: 'MID', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P027',
@@ -95,6 +101,7 @@ export const FUNGUS_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F10', host: 'cap', eyeSpread: 0.76, mouthLen: 0.81 },
     },
+    care: { light: 1, water: 'MID', temp: 'MID', active: 'NIGHT', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P028',
@@ -108,6 +115,7 @@ export const FUNGUS_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'cap', eyeSpread: 0.72, mouthLen: 0.58 },
     },
+    care: { light: 1, water: 'MID', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P029',
@@ -121,6 +129,15 @@ export const FUNGUS_PLANTS: PlantBase[] = [
       parts: { toxicGlow: true },
       face: { type: 'F09', host: 'mass', eyeSpread: 0.63, mouthLen: 0.53 },
     },
+    care: {
+      light: 1,
+      water: 'HIGH',
+      temp: 'COOL',
+      active: 'NIGHT',
+      favoriteNutrient: 'GREEN',
+      music: 'MYSTIC',
+      phrase: 'CHEER',
+    },
   },
   {
     id: 'P030',
@@ -133,6 +150,16 @@ export const FUNGUS_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R3', sub: 'R9' },
       parts: { toxicGlow: true },
       face: { type: 'F02', host: 'cap', eyeSpread: 0.95, mouthLen: 1.01 },
+    },
+    care: {
+      light: 1,
+      water: 'HIGH',
+      temp: 'COOL',
+      active: 'NIGHT',
+      favoriteNutrient: 'SWEET',
+      music: 'MYSTIC',
+      phrase: 'COMFORT',
+      needsNightExposure: true,
     },
   },
 ];

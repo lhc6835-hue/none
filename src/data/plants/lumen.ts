@@ -17,6 +17,7 @@ export const LUMEN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'center', eyeSpread: 0.6, mouthLen: 0.98 },
     },
+    care: { light: 2, water: 'MID', temp: 'MID', active: 'NIGHT', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P072',
@@ -30,6 +31,7 @@ export const LUMEN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F04', host: 'bulb', eyeSpread: 0.74, mouthLen: 0.84 },
     },
+    care: { light: 3, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P073',
@@ -43,6 +45,7 @@ export const LUMEN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F06', host: 'head', eyeSpread: 0.83, mouthLen: 0.89 },
     },
+    care: { light: 2, water: 'LOW', temp: 'MID', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P074',
@@ -56,6 +59,7 @@ export const LUMEN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F02', host: 'crystal', eyeSpread: 0.97, mouthLen: 0.75 },
     },
+    care: { light: 3, water: 'LOW', temp: 'MID', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P075',
@@ -69,6 +73,7 @@ export const LUMEN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F05', host: 'head', eyeSpread: 0.65, mouthLen: 0.8 },
     },
+    care: { light: 2, water: 'MID', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P076',
@@ -82,6 +87,7 @@ export const LUMEN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F10', host: 'mass', eyeSpread: 0.79, mouthLen: 0.66 },
     },
+    care: { light: 3, water: 'HIGH', temp: 'MID', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P077',
@@ -95,6 +101,7 @@ export const LUMEN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F03', host: 'center', eyeSpread: 0.88, mouthLen: 0.71 },
     },
+    care: { light: 2, water: 'MID', temp: 'MID', active: 'NIGHT', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P078',
@@ -107,6 +114,14 @@ export const LUMEN_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R6', sub: 'R9' },
       parts: {},
       face: { type: 'F01', host: 'flower', eyeSpread: 0.61, mouthLen: 0.57 },
+    },
+    care: {
+      light: 1,
+      water: 'HIGH',
+      temp: 'COOL',
+      active: 'NIGHT',
+      favoriteNutrient: 'SWEET',
+      aquatic: true,
     },
   },
   {
@@ -121,6 +136,15 @@ export const LUMEN_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F12', host: 'center', eyeSpread: 0.7, mouthLen: 0.61 },
     },
+    care: {
+      light: 1,
+      water: 'LOW',
+      temp: 'COOL',
+      active: 'NIGHT',
+      favoriteNutrient: 'STRONG',
+      music: 'MYSTIC',
+      phrase: 'PRAISE',
+    },
   },
   {
     id: 'P080',
@@ -133,6 +157,17 @@ export const LUMEN_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R5', sub: 'R4' },
       parts: {},
       face: { type: 'F01', host: 'crystal', eyeSpread: 0.85, mouthLen: 1.1 },
+    },
+    care: {
+      light: 3,
+      water: 'MID',
+      temp: 'MID',
+      active: 'DAY',
+      favoriteNutrient: 'SWEET',
+      music: 'MYSTIC',
+      phrase: 'CHEER',
+      needsNightExposure: true,
+      special: 'MOON_WINDOW_SHIFT',
     },
   },
 ];

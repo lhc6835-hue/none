@@ -17,6 +17,7 @@ export const STORM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F05', host: 'curl', eyeSpread: 0.76, mouthLen: 1.06 },
     },
+    care: { light: 1, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P082',
@@ -30,6 +31,7 @@ export const STORM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F02', host: 'center', eyeSpread: 0.67, mouthLen: 1.01 },
     },
+    care: { light: 2, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P083',
@@ -43,6 +45,7 @@ export const STORM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F03', host: 'center', eyeSpread: 0.99, mouthLen: 0.96 },
     },
+    care: { light: 3, water: 'LOW', temp: 'MID', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P084',
@@ -56,6 +59,7 @@ export const STORM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F08', host: 'head', eyeSpread: 0.9, mouthLen: 0.92 },
     },
+    care: { light: 2, water: 'HIGH', temp: 'COOL', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P085',
@@ -69,6 +73,7 @@ export const STORM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F04', host: 'mass', eyeSpread: 0.81, mouthLen: 0.87 },
     },
+    care: { light: 2, water: 'MID', temp: 'COOL', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P086',
@@ -82,6 +87,7 @@ export const STORM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F04', host: 'head', eyeSpread: 0.72, mouthLen: 0.83 },
     },
+    care: { light: 3, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P087',
@@ -95,6 +101,7 @@ export const STORM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'mass', eyeSpread: 0.63, mouthLen: 0.78 },
     },
+    care: { light: 2, water: 'HIGH', temp: 'COOL', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P088',
@@ -107,6 +114,15 @@ export const STORM_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R4', sub: 'R3' },
       parts: {},
       face: { type: 'F06', host: 'center', eyeSpread: 0.95, mouthLen: 0.74 },
+    },
+    care: {
+      light: 2,
+      water: 'LOW',
+      temp: 'MID',
+      active: 'NIGHT',
+      favoriteNutrient: 'STRONG',
+      music: 'MARCH',
+      phrase: 'BATTLE',
     },
   },
   {
@@ -121,6 +137,16 @@ export const STORM_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F09', host: 'crown', eyeSpread: 0.86, mouthLen: 0.69 },
     },
+    care: {
+      light: 2,
+      water: 'HIGH',
+      temp: 'COOL',
+      active: 'NIGHT',
+      favoriteNutrient: 'STRONG',
+      music: 'MYSTIC',
+      phrase: 'CHEER',
+      needsNightExposure: true,
+    },
   },
   {
     id: 'P090',
@@ -133,6 +159,17 @@ export const STORM_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R3', sub: 'R9' },
       parts: {},
       face: { type: 'F07', host: 'body', eyeSpread: 0.81, mouthLen: 0.59 },
+    },
+    care: {
+      light: 2,
+      water: 'LOW',
+      temp: 'MID',
+      active: 'DAY',
+      favoriteNutrient: 'GREEN',
+      music: 'WALTZ',
+      phrase: 'COMFORT',
+      needsNightExposure: true,
+      special: 'FAN_BREATH',
     },
   },
 ];

@@ -17,6 +17,7 @@ export const EMBER_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F04', host: 'fruit', eyeSpread: 0.6, mouthLen: 1.01 },
     },
+    care: { light: 3, water: 'LOW', temp: 'WARM', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P052',
@@ -30,6 +31,7 @@ export const EMBER_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F10', host: 'center', eyeSpread: 0.69, mouthLen: 1.06 },
     },
+    care: { light: 3, water: 'MID', temp: 'WARM', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P053',
@@ -43,6 +45,7 @@ export const EMBER_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F05', host: 'head', eyeSpread: 0.78, mouthLen: 1.1 },
     },
+    care: { light: 3, water: 'LOW', temp: 'WARM', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P054',
@@ -56,6 +59,7 @@ export const EMBER_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'column', eyeSpread: 0.87, mouthLen: 1.15 },
     },
+    care: { light: 3, water: 'LOW', temp: 'WARM', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P055',
@@ -69,6 +73,7 @@ export const EMBER_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F02', host: 'center', eyeSpread: 0.96, mouthLen: 1.19 },
     },
+    care: { light: 3, water: 'MID', temp: 'MID', active: 'NIGHT', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P056',
@@ -81,6 +86,14 @@ export const EMBER_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R5', sub: 'R4' },
       parts: {},
       face: { type: 'F01', host: 'flower', eyeSpread: 0.64, mouthLen: 0.53 },
+    },
+    care: {
+      light: 3,
+      water: 'HIGH',
+      temp: 'WARM',
+      active: 'DAY',
+      favoriteNutrient: 'SWEET',
+      aquatic: true,
     },
   },
   {
@@ -95,6 +108,7 @@ export const EMBER_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F06', host: 'curl', eyeSpread: 0.73, mouthLen: 0.57 },
     },
+    care: { light: 3, water: 'LOW', temp: 'WARM', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P058',
@@ -107,6 +121,15 @@ export const EMBER_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R9', sub: 'R2' },
       parts: {},
       face: { type: 'F02', host: 'column', eyeSpread: 0.61, mouthLen: 0.6 },
+    },
+    care: {
+      light: 3,
+      water: 'LOW',
+      temp: 'WARM',
+      active: 'NIGHT',
+      favoriteNutrient: 'SWEET',
+      music: 'JAZZ',
+      phrase: 'BATTLE',
     },
   },
   {
@@ -121,6 +144,16 @@ export const EMBER_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'center', eyeSpread: 0.7, mouthLen: 0.64 },
     },
+    care: {
+      light: 3,
+      water: 'MID',
+      temp: 'WARM',
+      active: 'DAY',
+      favoriteNutrient: 'GREEN',
+      music: 'MARCH',
+      phrase: 'PRAISE',
+      needsNightExposure: true,
+    },
   },
   {
     id: 'P060',
@@ -133,6 +166,17 @@ export const EMBER_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R4', sub: 'R5' },
       parts: {},
       face: { type: 'F05', host: 'head', eyeSpread: 0.95, mouthLen: 0.7 },
+    },
+    care: {
+      light: 2,
+      water: 'LOW',
+      temp: 'WARM',
+      active: 'NIGHT',
+      favoriteNutrient: 'STRONG',
+      music: 'MYSTIC',
+      phrase: 'COMFORT',
+      needsNightExposure: true,
+      special: 'CHARCOAL_HEAT',
     },
   },
 ];

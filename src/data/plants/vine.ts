@@ -17,6 +17,14 @@ export const VINE_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F01', host: 'leaf', eyeSpread: 0.86, mouthLen: 0.62 },
     },
+    care: {
+      light: 2,
+      water: 'HIGH',
+      temp: 'MID',
+      active: 'DAY',
+      favoriteNutrient: 'GREEN',
+      needsStake: true,
+    },
   },
   {
     id: 'P002',
@@ -30,6 +38,7 @@ export const VINE_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F10', host: 'mass', eyeSpread: 0.77, mouthLen: 0.58 },
     },
+    care: { light: 2, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P003',
@@ -43,6 +52,7 @@ export const VINE_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F03', host: 'head', eyeSpread: 0.68, mouthLen: 0.53 },
     },
+    care: { light: 2, water: 'MID', temp: 'MID', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P004',
@@ -56,6 +66,7 @@ export const VINE_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F11', host: 'trap', eyeSpread: 1, mouthLen: 1.19 },
     },
+    care: { light: 3, water: 'HIGH', temp: 'MID', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P005',
@@ -69,6 +80,7 @@ export const VINE_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F12', host: 'center', eyeSpread: 0.91, mouthLen: 1.15 },
     },
+    care: { light: 3, water: 'HIGH', temp: 'MID', active: 'DAY', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P006',
@@ -82,6 +94,7 @@ export const VINE_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F02', host: 'fruit', eyeSpread: 0.82, mouthLen: 1.1 },
     },
+    care: { light: 3, water: 'HIGH', temp: 'WARM', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P007',
@@ -95,6 +108,7 @@ export const VINE_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F07', host: 'crown', eyeSpread: 0.73, mouthLen: 1.06 },
     },
+    care: { light: 1, water: 'MID', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P008',
@@ -108,6 +122,7 @@ export const VINE_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F05', host: 'fruit', eyeSpread: 0.85, mouthLen: 1.03 },
     },
+    care: { light: 2, water: 'LOW', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P009',
@@ -121,6 +136,16 @@ export const VINE_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F09', host: 'leaf', eyeSpread: 0.76, mouthLen: 0.99 },
     },
+    care: {
+      light: 1,
+      water: 'MID',
+      temp: 'COOL',
+      active: 'NIGHT',
+      favoriteNutrient: 'STRONG',
+      music: 'LULLABY',
+      phrase: 'CHEER',
+      needsStake: true,
+    },
   },
   {
     id: 'P010',
@@ -133,6 +158,17 @@ export const VINE_PLANTS: PlantBase[] = [
       variantRamps: { main: 'R6', sub: 'R9' },
       parts: {},
       face: { type: 'F02', host: 'leaf', eyeSpread: 0.95, mouthLen: 1.04 },
+    },
+    care: {
+      light: 2,
+      water: 'HIGH',
+      temp: 'MID',
+      active: 'DAY',
+      favoriteNutrient: 'GREEN',
+      music: 'WALTZ',
+      phrase: 'BATTLE',
+      needsNightExposure: true,
+      needsStake: true,
     },
   },
 ];

@@ -17,6 +17,13 @@ export interface GameEvents {
 
   // 정원 (M2)
   'plant:watered': { uid: string };
+  'plant:cared': { uid: string; action: string; perfect: boolean };
+  'plant:stageUp': { uid: string; from: number; to: number };
+  /** 새싹이 되는 순간: '처음 눈뜨기' 연출 → 이름 짓기 (이 게임의 대표 연출) */
+  'plant:eyesOpen': { uid: string };
+  'plant:bloom': { uid: string; quality: number; traits: string[]; variant: boolean };
+  'plant:problem': { uid: string; kind: string };
+  'plant:planted': { uid: string };
 
   // 전투 (M3)
   'battle:enemyKilled': { enemyId: string };

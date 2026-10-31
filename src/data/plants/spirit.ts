@@ -18,6 +18,7 @@ export const SPIRIT_PLANTS: PlantBase[] = [
       face: { type: 'F03', host: 'center', eyeSpread: 0.9, mouthLen: 0.63 },
       translucent: true,
     },
+    care: { light: 1, water: 'MID', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P092',
@@ -32,6 +33,7 @@ export const SPIRIT_PLANTS: PlantBase[] = [
       face: { type: 'F10', host: 'mass', eyeSpread: 0.99, mouthLen: 0.68 },
       translucent: true,
     },
+    care: { light: 1, water: 'HIGH', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P093',
@@ -46,6 +48,7 @@ export const SPIRIT_PLANTS: PlantBase[] = [
       face: { type: 'F01', host: 'body', eyeSpread: 0.67, mouthLen: 0.72 },
       translucent: true,
     },
+    care: { light: 1, water: 'HIGH', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P094',
@@ -60,6 +63,7 @@ export const SPIRIT_PLANTS: PlantBase[] = [
       face: { type: 'F06', host: 'center', eyeSpread: 0.86, mouthLen: 1.11 },
       translucent: true,
     },
+    care: { light: 1, water: 'LOW', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P095',
@@ -73,6 +77,14 @@ export const SPIRIT_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F07', host: 'flower', eyeSpread: 0.95, mouthLen: 1.16 },
       translucent: true,
+    },
+    care: {
+      light: 1,
+      water: 'HIGH',
+      temp: 'COOL',
+      active: 'NIGHT',
+      favoriteNutrient: 'SWEET',
+      aquatic: true,
     },
   },
   {
@@ -88,6 +100,7 @@ export const SPIRIT_PLANTS: PlantBase[] = [
       face: { type: 'F05', host: 'center', eyeSpread: 0.63, mouthLen: 1.2 },
       translucent: true,
     },
+    care: { light: 2, water: 'HIGH', temp: 'COOL', active: 'DAY', favoriteNutrient: 'GREEN' },
   },
   {
     id: 'P097',
@@ -102,6 +115,7 @@ export const SPIRIT_PLANTS: PlantBase[] = [
       face: { type: 'F01', host: 'trunk', eyeSpread: 0.72, mouthLen: 0.54 },
       translucent: true,
     },
+    care: { light: 1, water: 'MID', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'STRONG' },
   },
   {
     id: 'P098',
@@ -116,6 +130,7 @@ export const SPIRIT_PLANTS: PlantBase[] = [
       face: { type: 'F04', host: 'head', eyeSpread: 0.91, mouthLen: 0.93 },
       translucent: true,
     },
+    care: { light: 1, water: 'MID', temp: 'COOL', active: 'NIGHT', favoriteNutrient: 'SWEET' },
   },
   {
     id: 'P099',
@@ -130,6 +145,15 @@ export const SPIRIT_PLANTS: PlantBase[] = [
       face: { type: 'F02', host: 'center', eyeSpread: 1, mouthLen: 0.98 },
       translucent: true,
     },
+    care: {
+      light: 2,
+      water: 'MID',
+      temp: 'MID',
+      active: 'NIGHT',
+      favoriteNutrient: 'STRONG',
+      music: 'WALTZ',
+      phrase: 'CHEER',
+    },
   },
   {
     id: 'P100',
@@ -143,6 +167,16 @@ export const SPIRIT_PLANTS: PlantBase[] = [
       parts: {},
       face: { type: 'F02', host: 'crown', eyeSpread: 0.8, mouthLen: 0.56 },
       translucent: true,
+    },
+    care: {
+      light: 1,
+      water: 'MID',
+      temp: 'COOL',
+      active: 'NIGHT',
+      favoriteNutrient: 'SWEET',
+      music: 'MYSTIC',
+      phrase: 'COMFORT',
+      needsNightExposure: true,
     },
   },
 ];

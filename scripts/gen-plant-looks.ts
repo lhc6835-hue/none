@@ -64,6 +64,7 @@ interface Row {
   ramps: { main: string; sub: string; accent?: string; special?: string };
   variantRamps: { main: string; sub: string };
   flags: Record<string, boolean>;
+  care: string;
 }
 
 /** 아이디 문자열의 고정 해시(FNV-1a). 종마다 얼굴 미세 조정값을 안정적으로 정한다. */
@@ -136,10 +137,68 @@ function parseDocs(): Row[] {
         face: form[2],
         hostHint: form[3],
         ...parseColor(c[4]),
+        care: c[8],
       });
     }
   }
   return rows;
+}
+
+const NUTRIENT: Record<string, string> = {
+  초록: 'GREEN',
+  쑥쑥: 'GROW',
+  달콤: 'SWEET',
+  튼튼: 'STRONG',
+};
+const MUSIC: Record<string, string> = {
+  자장가: 'LULLABY',
+  왈츠: 'WALTZ',
+  행진곡: 'MARCH',
+  빗소리: 'RAIN',
+  재즈풍: 'JAZZ',
+  신비: 'MYSTIC',
+};
+const PHRASE: Record<string, string> = {
+  응원: 'CHEER',
+  칭찬: 'PRAISE',
+  전투: 'BATTLE',
+  위로: 'COMFORT',
+};
+const UNIQUE: Record<string, string> = {
+  P040: 'SPRING_WALTZ',
+  P060: 'CHARCOAL_HEAT',
+  P080: 'MOON_WINDOW_SHIFT',
+  P090: 'FAN_BREATH',
+};
+
+/** 07문서 '돌봄' 열: 빛 · 물 · 온도 · 활동 시간 · ♥영양제 [· 🎵음악 · 💬말 · +밤 노출 · 고유 조건] */
+function careOf(row: Row): string {
+  const text = row.care;
+  const tokens = text
+    .replace(/\(.*?\)/g, '')
+    .split(' · ')
+    .map((t) => t.trim());
+  const light = Number(text.match(/빛(\d)/)?.[1]);
+  const water = text.includes('물적게') ? 'LOW' : text.includes('물보통') ? 'MID' : 'HIGH'; // 수조 종은 물을 많이 좋아함
+  const temp = text.includes('서늘') ? 'COOL' : text.includes('따뜻') ? 'WARM' : 'MID';
+  const nutrient = NUTRIENT[text.match(/♥(초록|쑥쑥|달콤|튼튼)/)?.[1] ?? ''];
+  if (!light || !nutrient) throw new Error(`돌봄 열을 읽지 못했습니다: ${row.id} ${text}`);
+  const care: Record<string, unknown> = {
+    light,
+    water,
+    temp,
+    active: tokens.includes('밤') ? 'NIGHT' : 'DAY',
+    favoriteNutrient: nutrient,
+  };
+  const music = text.match(/🎵(\S+)/)?.[1];
+  const phrase = text.match(/💬(\S+)/)?.[1];
+  if (music) care.music = MUSIC[music];
+  if (phrase) care.phrase = PHRASE[phrase];
+  if (text.includes('+밤 노출')) care.needsNightExposure = true;
+  if (text.includes('지지대 필요') || row.body === 'VINE') care.needsStake = true;
+  if (text.includes('수조')) care.aquatic = true;
+  if (UNIQUE[row.id]) care.special = UNIQUE[row.id];
+  return JSON.stringify(care);
 }
 
 function hostOf(row: Row): string {
@@ -184,7 +243,7 @@ for (const [family, file] of Object.entries(FAMILY_FILE)) {
   const body = list
     .map(
       (r) =>
-        `  { id: '${r.id}', nameKey: 'plant.${r.id}.name', grade: '${r.grade}', family: '${family}', look: ${lookOf(r)} },`,
+        `  { id: '${r.id}', nameKey: 'plant.${r.id}.name', grade: '${r.grade}', family: '${family}', look: ${lookOf(r)}, care: ${careOf(r)} },`,
     )
     .join('\n');
   writeFileSync(
