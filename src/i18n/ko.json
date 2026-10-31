@@ -1,0 +1,53 @@
+{
+  "game.title": "점선정원",
+  "game.logo": "점 선 정 원",
+  "game.subtitle": "씨앗 수비대",
+  "game.version": "v{version}",
+
+  "boot.loading": "씨앗을 심는 중…",
+
+  "save.failed": "저장하지 못했어요. 저장 공간을 확인해 주세요.",
+
+  "common.ok": "좋아요",
+  "common.cancel": "취소",
+  "common.close": "닫기",
+  "common.back": "돌아가기",
+  "common.yes": "네",
+  "common.no": "아니요",
+
+  "title.continue": "이어하기",
+  "title.newGame": "새로 시작",
+  "title.settings": "설정",
+  "title.credits": "만든 사람들",
+  "title.tapHint": "아무 데나 눌러서 이어하기",
+  "title.newGameConfirm.title": "새로 시작할까요?",
+  "title.newGameConfirm.body": "지금 저장은 백업으로 밀려나요.",
+  "title.newGameConfirm.yes": "네, 새로 시작해요",
+  "title.newGameConfirm.no": "아니요",
+  "title.notice.recovered": "저장 파일이 손상되어 직전 저장본으로 불러왔어요",
+  "title.notice.corrupt": "저장 파일을 읽지 못해서 새로 시작해요",
+  "title.notice.tooNew": "더 새로운 버전에서 만든 저장이라 이 버전에서는 저장하지 않아요",
+
+  "hub.placeholder.title": "온실",
+  "hub.placeholder.body": "먼지 쌓인 온실이 곧 문을 열어요.",
+  "hub.toTitle": "타이틀로",
+
+  "settings.title": "설정",
+  "settings.language": "언어",
+  "settings.language.ko": "한국어",
+  "settings.language.en": "English",
+  "settings.volume.master": "전체 음량",
+  "settings.volume.music": "배경음",
+  "settings.volume.sfx": "효과음",
+  "settings.volume.hum": "식물 콧노래",
+
+  "credits.title": "만든 사람들",
+  "credits.engine": "엔진  Phaser 3 (MIT)",
+  "credits.sfx": "효과음  ZzFX (MIT)",
+  "credits.font": "글꼴  갈무리 Galmuri (OFL 1.1)",
+  "credits.thanks": "할머니의 온실을 찾아 주셔서 고마워요.",
+
+  "name.error.length": "이름은 1~8글자로 지어 주세요.",
+  "name.error.chars": "한글, 영문, 숫자만 쓸 수 있어요.",
+  "name.error.banned": "다른 이름을 지어 주세요."
+}

@@ -1,0 +1,53 @@
+{
+  "game.title": "Dotline Garden",
+  "game.logo": "DOTLINE GARDEN",
+  "game.subtitle": "Seed Guardians",
+  "game.version": "v{version}",
+
+  "boot.loading": "Planting seeds…",
+
+  "save.failed": "Could not save. Please check your storage space.",
+
+  "common.ok": "OK",
+  "common.cancel": "Cancel",
+  "common.close": "Close",
+  "common.back": "Back",
+  "common.yes": "Yes",
+  "common.no": "No",
+
+  "title.continue": "Continue",
+  "title.newGame": "New Game",
+  "title.settings": "Settings",
+  "title.credits": "Credits",
+  "title.tapHint": "Tap anywhere to continue",
+  "title.newGameConfirm.title": "Start a new game?",
+  "title.newGameConfirm.body": "Your current save will be moved to the backup slot.",
+  "title.newGameConfirm.yes": "Yes, start over",
+  "title.newGameConfirm.no": "No",
+  "title.notice.recovered": "Your save was damaged, so the previous save was loaded.",
+  "title.notice.corrupt": "The save could not be read, so a new game was started.",
+  "title.notice.tooNew": "This save is from a newer version and will not be overwritten.",
+
+  "hub.placeholder.title": "Greenhouse",
+  "hub.placeholder.body": "The dusty greenhouse will open soon.",
+  "hub.toTitle": "To Title",
+
+  "settings.title": "Settings",
+  "settings.language": "Language",
+  "settings.language.ko": "한국어",
+  "settings.language.en": "English",
+  "settings.volume.master": "Master Volume",
+  "settings.volume.music": "Music",
+  "settings.volume.sfx": "Sound FX",
+  "settings.volume.hum": "Plant Humming",
+
+  "credits.title": "Credits",
+  "credits.engine": "Engine  Phaser 3 (MIT)",
+  "credits.sfx": "Sound FX  ZzFX (MIT)",
+  "credits.font": "Font  Galmuri (OFL 1.1)",
+  "credits.thanks": "Thank you for visiting Grandma's greenhouse.",
+
+  "name.error.length": "Names must be 1 to 8 characters.",
+  "name.error.chars": "Only Korean, English letters and digits are allowed.",
+  "name.error.banned": "Please choose a different name."
+}

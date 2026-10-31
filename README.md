@@ -5,4 +5,15 @@
 - 기획서: [docs/README.md](docs/README.md)(분할본) · [docs/GDD-full.md](docs/GDD-full.md)(통합본)
 - 구현 가이드: [docs/13-roadmap-qa.md](docs/13-roadmap-qa.md)의 「마스터 프롬프트」부터 시작
 
-현재 상태: 기획 완료, 구현 전.
+현재 상태: **M0(프로젝트 뼈대) 완료**. 다음은 M1(아트 파이프라인 · 얼굴).
+
+```
+npm install            # 의존성 설치 (.npmrc 에 legacy-peer-deps 설정이 들어 있음)
+npm run dev            # 개발 서버 (http://localhost:5173, ?debug=1 로 디버그 오버레이)
+npm run lint           # ESLint + Prettier
+npm test               # 단위 · 데이터 테스트 (Vitest)
+npm run test:e2e       # 브라우저 E2E · 스크린샷 (Playwright, 1280×720 · 844×390)
+npm run build          # 타입 검사 + 프로덕션 빌드(dist/)
+```
+
+진행 기록과 기획서와 다르게 정한 내용은 [docs/DECISIONS.md](docs/DECISIONS.md), 스크린샷은 `docs/screenshots/` 에 있다.
