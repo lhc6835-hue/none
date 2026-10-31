@@ -24,6 +24,7 @@ export interface GameEvents {
   'plant:bloom': { uid: string; quality: number; traits: string[]; variant: boolean };
   'plant:problem': { uid: string; kind: string };
   'plant:planted': { uid: string };
+  'player:levelUp': { level: number };
 
   // 전투 (M3)
   'battle:enemyKilled': { enemyId: string };

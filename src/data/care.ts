@@ -1,6 +1,6 @@
 // 돌봄 · 성장 수치 (04문서). 밸런스 수치는 전부 여기에만 둔다. 바꾸면 DECISIONS.md 에 적는다.
 
-import type { GradeId } from '../core/schema';
+import type { GradeId, SongGenre } from '../core/schema';
 import { GRADES } from './grades';
 
 /** 성장 단계 0–5: 씨앗 · 발아 · 새싹 · 어린잎 · 성숙 · 개화. 누적 GP 비율 (04문서 2절) */
@@ -248,3 +248,6 @@ export const AWAKEN_COST: Record<GradeId, number> = {
   ORIGIN: 5,
 };
 export const HARVEST_COOLDOWN_MS = 20 * 3_600_000;
+
+/** 축음기 레코드(음악 장르 6종) */
+export const SONG_GENRES: SongGenre[] = ['LULLABY', 'WALTZ', 'MARCH', 'RAIN', 'JAZZ', 'MYSTIC'];

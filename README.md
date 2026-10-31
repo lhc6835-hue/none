@@ -5,7 +5,7 @@
 - 기획서: [docs/README.md](docs/README.md)(분할본) · [docs/GDD-full.md](docs/GDD-full.md)(통합본)
 - 구현 가이드: [docs/13-roadmap-qa.md](docs/13-roadmap-qa.md)의 「마스터 프롬프트」부터 시작
 
-현재 상태: **M0(프로젝트 뼈대) · M1(아트 파이프라인 · 얼굴) 완료**. **M2(정원 · 돌봄 코어)는 로직 · 데이터까지만 완료**(화면 미구현 — `docs/DECISIONS.md` 참고). 다음은 M2 화면 → M3.
+현재 상태: **M0(프로젝트 뼈대) · M1(아트 파이프라인 · 얼굴) · M2(정원 · 돌봄 코어) 완료**(M2 의 '사람이 직접 30분 플레이' 확인만 남음 — `docs/DECISIONS.md`). 다음은 M3(전투 코어).
 
 ```
 npm install            # 의존성 설치 (.npmrc 에 legacy-peer-deps 설정이 들어 있음)

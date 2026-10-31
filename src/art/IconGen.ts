@@ -2,14 +2,9 @@
 // 등급 표식(모양 × 개수)은 색각 이상을 배려해 색만으로 등급을 구분하지 않게 한다(03문서 2절).
 
 import type { GradeMark } from '../data/grades';
+import { CARE_ICONS, type IconDef } from './icons/careIcons';
 import { RAMPS, SPECIAL } from './palette';
 import { emptyColorGrid, type ColorGrid } from './Shading';
-
-interface IconDef {
-  rows: readonly string[];
-  /** o = 잉크 외곽선. 나머지 글자는 팔레트 색 */
-  colors: Record<string, string>;
-}
 
 const DROP_ROWS = [
   '....o....',
@@ -23,7 +18,7 @@ const DROP_ROWS = [
   '...ooo...',
 ];
 
-export const ICONS: Record<string, IconDef> = {
+const BASE_ICONS: Record<string, IconDef> = {
   drop: { rows: DROP_ROWS, colors: { b: RAMPS.R4[3], B: RAMPS.R4[2], W: SPECIAL.PAPER } },
   dew: {
     rows: [
@@ -153,6 +148,8 @@ export const ICONS: Record<string, IconDef> = {
     colors: { g: RAMPS.R1[3], G: RAMPS.R1[2] },
   },
 };
+
+export const ICONS: Record<string, IconDef> = { ...BASE_ICONS, ...CARE_ICONS };
 
 export const ICON_SIZE = 12;
 

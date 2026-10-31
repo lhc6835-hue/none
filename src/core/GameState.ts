@@ -63,6 +63,8 @@ export interface GameState {
     nextUid: number;
     /** 마지막으로 시뮬레이션을 돌린 시각(ms). 오프라인 계산의 기준 */
     lastTickAt: number;
+    /** 허브를 마지막으로 보던 가로 위치(다음 접속 때 그 자리에서 시작) */
+    hubPan?: number;
   };
   packet: PacketState;
   /** 해금 · 튜토리얼 · 한 번만 보는 안내 등 */

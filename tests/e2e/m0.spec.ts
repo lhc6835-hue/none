@@ -4,6 +4,7 @@ import { mkdirSync } from 'node:fs';
 import { RAMPS } from '../../src/art/palette';
 import { computeScreen } from '../../src/core/Screen';
 import {
+  backToTitle,
   bootToTitle,
   canvasRect,
   clickGame,
@@ -152,8 +153,7 @@ test.describe('M0 — 저장 · 설정', () => {
     const saved = await page.evaluate(() => localStorage.getItem('dotline.save.v1'));
     expect(saved).not.toBeNull();
 
-    await clickGame(page, 320, 332); // 타이틀로
-    await waitForScene(page, 'Title');
+    await backToTitle(page);
     await clickGame(page, 268, 332); // 새로 시작 → 확인창
     await page.waitForTimeout(500);
     expect(await visibleTexts(page, 'UIOverlay')).toContain(ko['title.newGameConfirm.title']);
@@ -186,8 +186,7 @@ test.describe('M0 — 저장 · 설정', () => {
         window.__dotline!.services as unknown as { autoSave: { flush(r: string): boolean } }
       ).autoSave.flush('t');
     });
-    await clickGame(page, 320, 332);
-    await waitForScene(page, 'Title');
+    await backToTitle(page);
     await clickGame(page, 268, 332);
     await page.waitForTimeout(500);
     const yes = await findButton(page, 'UIOverlay', ko['title.newGameConfirm.yes']);

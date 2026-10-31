@@ -75,6 +75,9 @@ export const STARTER_ITEMS: Record<ItemId, number> = {
   COMPOST: 2,
   FUNGICIDE: 1,
   PESTICIDE: 1,
+  // 상점(M5)이 열리기 전에도 분갈이(단계 2 · 4 관문)를 할 수 있도록 한 단계 큰 토분을 미리 지급한다
+  'pot:CLAY:2': 3,
+  'pot:CLAY:3': 3,
 };
 /** 새 게임 시작 씨앗 (튜토리얼은 M5: 따끔선인장 · 꼬불덩굴 · 꿀단지 민들레) */
 export const STARTER_SEEDS: string[] = ['P011', 'P001', 'P031'];

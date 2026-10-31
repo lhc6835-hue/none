@@ -14,7 +14,8 @@
     "sim": "tsx scripts/sim.ts",
     "lint": "eslint . && prettier --check \"src/**/*.{ts,json}\" \"tests/**/*.ts\" \"scripts/**/*.ts\"",
     "format": "prettier --write \"src/**/*.{ts,json}\" \"tests/**/*.ts\" \"scripts/**/*.ts\"",
-    "validate": "tsx scripts/validate-data.ts"
+    "validate": "tsx scripts/validate-data.ts",
+    "build:single": "node scripts/build-single.mjs"
   },
   "dependencies": {
     "galmuri": "^2.40.3",

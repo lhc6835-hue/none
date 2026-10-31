@@ -5,7 +5,7 @@ import Phaser from 'phaser';
 import { RAMPS, SPECIAL, toInt, type Ramp } from '../art/palette';
 import { numberText } from './NumberFont';
 
-export type GaugeColor = 'water' | 'nutrition' | 'hygiene' | 'mood' | 'hp';
+export type GaugeColor = 'water' | 'nutrition' | 'hygiene' | 'mood' | 'hp' | 'growth';
 
 const FILLS: Record<GaugeColor, Ramp> = {
   water: RAMPS.R4,
@@ -13,6 +13,7 @@ const FILLS: Record<GaugeColor, Ramp> = {
   hygiene: RAMPS.R3,
   mood: RAMPS.R6,
   hp: RAMPS.R1,
+  growth: RAMPS.R9,
 };
 
 export class Gauge extends Phaser.GameObjects.Container {

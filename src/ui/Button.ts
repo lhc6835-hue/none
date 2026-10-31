@@ -3,7 +3,7 @@
 //  모든 입력은 같은 프레임 안에 소리와 시각 반응을 시작한다.
 
 import Phaser from 'phaser';
-import { SPECIAL, RAMPS } from '../art/palette';
+import { SPECIAL, RAMPS, toInt } from '../art/palette';
 import { getApp } from '../scenes/context';
 import { BUTTON_BODY_TOP, ensureButton, type ButtonState, type ButtonVariant } from './Frames';
 import { pixelText, type FontSize } from './PixelText';
@@ -18,6 +18,8 @@ export interface ButtonOptions {
   bold?: boolean;
   variant?: ButtonVariant;
   disabled?: boolean;
+  /** 글자 왼쪽에 붙일 아이콘 텍스처 키 */
+  icon?: string;
   onClick: () => void;
 }
 
@@ -31,6 +33,9 @@ export class Button extends Phaser.GameObjects.Container {
   private hovering = false;
   private onClick: () => void;
   private releaseTween: Phaser.Tweens.Tween | undefined;
+  private iconImage: Phaser.GameObjects.Image | undefined;
+  private iconDx = 0;
+  private labelDx = 0;
 
   constructor(scene: Phaser.Scene, x: number, y: number, opts: ButtonOptions) {
     super(scene, Math.round(x), Math.round(y));
@@ -49,10 +54,17 @@ export class Button extends Phaser.GameObjects.Container {
       anchorY: 0.5,
     });
     this.add([this.bg, this.labelText]);
+    if (opts.icon) {
+      this.iconImage = scene.add.image(0, 0, opts.icon);
+      this.add(this.iconImage);
+      this.iconDx = Math.round(-this.bw / 2 + 4 + this.iconImage.width / 2);
+      this.labelDx = Math.round(this.iconImage.width / 2 + 2);
+    }
 
     this.setSize(this.bw, this.bh);
     this.setInteractive(
-      new Phaser.Geom.Rectangle(-this.bw / 2, -this.bh / 2, this.bw, this.bh),
+      // 컨테이너의 히트 영역은 왼쪽 위 기준(표시 원점 = 크기/2 가 더해진다)이라 (0,0)에서 시작해야 중앙에 놓인다
+      new Phaser.Geom.Rectangle(0, 0, this.bw, this.bh),
       Phaser.Geom.Rectangle.Contains,
     );
     this.input!.cursor = 'pointer';
@@ -71,7 +83,10 @@ export class Button extends Phaser.GameObjects.Container {
     this.bg.setTexture(ensureButton(this.scene, this.variant, state, this.bw, this.bh));
     this.bg.setPosition(0, -this.bh / 2 - BUTTON_BODY_TOP.normal);
     const dy = BUTTON_BODY_TOP[state] - BUTTON_BODY_TOP.normal;
-    this.labelText.setPosition(0, Math.round(dy + 0.5)); // 가운데 정렬 보정
+    this.labelText.setPosition(this.labelDx, Math.round(dy + 0.5)); // 가운데 정렬 보정
+    this.iconImage?.setPosition(this.iconDx, Math.round(dy + 0.5));
+    if (state === 'disabled') this.iconImage?.setTintFill(toInt(RAMPS.R11[2]));
+    else this.iconImage?.clearTint();
     this.labelText.setColor(state === 'disabled' ? RAMPS.R11[1] : SPECIAL.INK);
   }
 

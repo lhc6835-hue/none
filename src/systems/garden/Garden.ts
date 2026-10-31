@@ -14,7 +14,15 @@ import { takeItem, seedKey } from '../economy/Inventory';
 import { envFor, type PlantEnv, type WorldSnapshot } from './Environment';
 import { advanceGrowth } from './Growth';
 import { neglectPenalty } from './Affection';
-import { applyDecay, conditionOf, clampNeed, decayRates, waterRangeOf } from './Needs';
+import { validateName, type NameError } from '../Naming';
+import {
+  applyDecay,
+  clampNeed,
+  conditionOf,
+  decayRates,
+  derivedStatuses,
+  waterRangeOf,
+} from './Needs';
 import { fungusEatsMold, neighborhoodOf, rollProblems, tickProblems } from './Problems';
 import { recordCondition } from './Quality';
 
@@ -232,4 +240,86 @@ export function tickGarden(
 ): void {
   for (const plant of state.plants) stepPlant(state, plant, dtSec, now, world, bus);
   state.garden.lastTickAt = now;
+}
+
+export type MoveResult =
+  { ok: true; swapped: boolean } | { ok: false; reason: 'locked' | 'noSlot' | 'aquatic' };
+
+/**
+ * 화분을 다른 칸(같은 구역이어도 됨)으로 옮긴다(04문서 1-1). 빈 칸이면 이동, 다른 식물이 있으면 서로 자리를 바꾼다.
+ * 수조 구역에는 수생 식물만 들어간다. 달빛 창 밤 노출 같은 구역 의존 기록은 구역이 바뀌면 끊긴다.
+ */
+export function movePlant(
+  state: GameState,
+  uid: string,
+  zone: ZoneId,
+  slot: number,
+  now: number,
+): MoveResult {
+  const plant = plantByUid(state, uid);
+  if (!plant) return { ok: false, reason: 'noSlot' };
+  if (!isZoneUnlocked(state, zone)) return { ok: false, reason: 'locked' };
+  if (slot < 0 || slot >= openSlots(state, zone)) return { ok: false, reason: 'noSlot' };
+  const fits = (p: PlantInstance, z: ZoneId) =>
+    !ZONES[z].aquaticOnly || baseOf(p.speciesId).care.aquatic;
+  if (!fits(plant, zone)) return { ok: false, reason: 'aquatic' };
+  const from = plant.location;
+  const other = state.plants.find(
+    (p) => p !== plant && p.location.zone === zone && p.location.slot === slot,
+  );
+  if (other) {
+    if (!fits(other, from.zone)) return { ok: false, reason: 'aquatic' };
+    other.location = { zone: from.zone, slot: from.slot };
+  }
+  plant.location = { zone, slot };
+  plant.timers.nightsInMoon = 0;
+  plant.lastUpdated = now;
+  return { ok: true, swapped: other !== undefined };
+}
+
+/** 이름 짓기(처음 눈뜬 직후). 검사를 통과하면 이름을 넣고 눈뜨기 대기 표시를 지운다. */
+export function namePlant(
+  plant: PlantInstance,
+  rawName: string,
+  now: number,
+): { ok: true; name: string } | { ok: false; error: NameError } {
+  const check = validateName(rawName);
+  if (!check.ok) return check;
+  plant.nickname = check.name;
+  delete plant.flags.needsName;
+  plant.diary.push({ at: now, kind: 'named', name: check.name });
+  return { ok: true, name: check.name };
+}
+
+/** 허브에서 식물 위에 띄우는 욕구 말풍선 기호(가장 급한 것 하나) */
+export type BubbleKind =
+  | 'water'
+  | 'hungry'
+  | 'mold'
+  | 'pest'
+  | 'wither'
+  | 'sick'
+  | 'sulk'
+  | 'sleep'
+  | 'rootbound'
+  | 'topple'
+  | 'bloom'
+  | null;
+
+export function bubbleOf(plant: PlantInstance, base: PlantBase, env: PlantEnv): BubbleKind {
+  const has = (k: string) => plant.problems.some((p) => p.kind === k);
+  const st = derivedStatuses(plant, base, env);
+  if (plant.flags.needsName) return 'bloom'; // 이름을 기다리는 중: 반짝 표시
+  if (has('MOLD_DISEASE') || has('ROOT_ROT')) return 'sick';
+  if (st.includes('THIRSTY')) return 'water';
+  if (has('PEST')) return 'pest';
+  if (has('MOLD')) return 'mold';
+  if (st.includes('HUNGRY')) return 'hungry';
+  if (has('ROOTBOUND')) return 'rootbound';
+  if (has('TOPPLED')) return 'topple';
+  if (st.includes('SULKY')) return 'sulk';
+  if (has('WITHER')) return 'wither';
+  if (plant.stage >= 5) return 'bloom';
+  if (st.includes('SLEEPING')) return 'sleep';
+  return null;
 }

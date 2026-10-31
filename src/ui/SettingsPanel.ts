@@ -6,7 +6,7 @@ import type { Language } from '../core/Settings';
 import { setLanguage, t } from '../i18n';
 import { getApp } from '../scenes/context';
 import { Button } from './Button';
-import type { ModalDef } from './Modal';
+import type { ModalButton, ModalDef } from './Modal';
 import { pixelText } from './PixelText';
 
 const VOLUME_KEYS = ['master', 'music', 'sfx', 'hum'] as const;
@@ -48,12 +48,16 @@ function volumeRow(
 }
 
 /** onLanguage: 언어를 바꾼 뒤 화면을 새로 그려야 할 때 불린다 */
-export function settingsModal(scene: Phaser.Scene, onLanguage: () => void): ModalDef {
+export function settingsModal(
+  scene: Phaser.Scene,
+  onLanguage: () => void,
+  extraButtons: ModalButton[] = [],
+): ModalDef {
   const { settings } = getApp(scene).services;
   return {
     title: t('settings.title'),
     width: 280,
-    buttons: [{ label: t('common.close') }],
+    buttons: [...extraButtons, { label: t('common.close') }],
     build: (s, parent, top, width) => {
       let y = top;
       // 언어

@@ -197,3 +197,12 @@ function loadStrings(lang: 'ko' | 'en'): Record<string, string> {
 }
 export const ko = loadStrings('ko');
 export const en = loadStrings('en');
+
+/** 허브에서 설정 창(톱니바퀴)을 열고 '타이틀로'를 눌러 타이틀로 돌아간다. */
+export async function backToTitle(page: Page): Promise<void> {
+  await clickGame(page, 588, 17);
+  await page.waitForTimeout(450);
+  const b = await findButton(page, 'UIOverlay', ko['hub.toTitle']);
+  await clickGame(page, b.x, b.y);
+  await waitForScene(page, 'Title');
+}

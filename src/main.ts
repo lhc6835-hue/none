@@ -5,6 +5,7 @@ import { AtlasCache } from './art/AtlasCache';
 import { AudioBus } from './audio/AudioBus';
 import { Sfx } from './audio/Sfx';
 import { RAMPS } from './art/palette';
+import { OffsetClock } from './core/Clock';
 import { computeScreen } from './core/Screen';
 import { createServices, pickStorage } from './core/Services';
 import { setLanguage } from './i18n';
@@ -14,6 +15,7 @@ import { DebugOverlay } from './scenes/DebugOverlay';
 import { HubScene } from './scenes/HubScene';
 import { PreloadScene } from './scenes/PreloadScene';
 import { TitleScene } from './scenes/TitleScene';
+import { CareScene } from './scenes/CareScene';
 import { UIKitScene } from './scenes/UIKitScene';
 import { UIOverlay } from './scenes/UIOverlay';
 import { setApp } from './scenes/context';
@@ -21,7 +23,12 @@ import { fitCanvas } from './ui/Layout';
 
 const debug = new URLSearchParams(window.location.search).get('debug') === '1';
 
-const services = createServices({ storage: pickStorage(), debug });
+// 디버그에서는 '시간 앞으로 감기'(치트 패널)를 위해 오프셋 시계를 쓴다
+const services = createServices({
+  storage: pickStorage(),
+  debug,
+  clock: debug ? new OffsetClock() : undefined,
+});
 const audio = new AudioBus();
 const sfx = new Sfx(audio);
 
@@ -55,6 +62,7 @@ const game = new Phaser.Game({
     PreloadScene,
     TitleScene,
     HubScene,
+    CareScene,
     ArtGalleryScene,
     UIKitScene,
     UIOverlay,

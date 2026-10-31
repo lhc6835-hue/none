@@ -14,7 +14,8 @@ import { getApp } from '../scenes/context';
 
 export interface PlantViewOptions {
   speciesId: string;
-  stage: Stage;
+  /** 0 = 씨앗(흙 위에 씨앗만 보인다) */
+  stage: Stage | 0;
   variant?: boolean;
   expression?: Expression;
   /** 식물마다 깜빡임을 엇갈리게 하는 시드(uid) */
@@ -30,7 +31,7 @@ const IDLE_MS = 400;
 
 export class PlantView extends Phaser.GameObjects.Container {
   readonly speciesId: string;
-  readonly stage: Stage;
+  readonly stage: Stage | 0;
   private readonly bodyImage: Phaser.GameObjects.Image;
   private readonly faceGfx: Phaser.GameObjects.Graphics;
   private readonly sprite: PlantSprite;
@@ -58,6 +59,18 @@ export class PlantView extends Phaser.GameObjects.Container {
     this.phase = Math.floor(this.blink.firstAt) % 4;
 
     const { atlas } = getApp(scene);
+    if (opts.stage === 0) {
+      // 씨앗(단계 0): 흙 위에 씨앗 끝이 살짝 보인다. 얼굴 · 프레임 애니메이션이 없다.
+      const base = PLANT_BASE_BY_ID.get(opts.speciesId);
+      if (!base) throw new Error(`없는 식물: ${opts.speciesId}`);
+      this.sprite = { w: 10, h: 10, translucent: false } as unknown as PlantSprite;
+      this.bodyImage = scene.add.image(0, 3, atlas.seed(base.family, base.grade)).setOrigin(0.5, 1);
+      this.faceGfx = scene.add.graphics();
+      this.add([this.bodyImage, this.faceGfx]);
+      this.setSize(10, 10);
+      scene.add.existing(this);
+      return;
+    }
     const tex = atlas.plant(opts.speciesId, opts.stage, opts.variant ?? false);
     atlas.pin(tex.key);
     this.sprite = tex.sprite;

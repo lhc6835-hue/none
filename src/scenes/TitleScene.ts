@@ -6,6 +6,7 @@ import { FX } from '../art/FxTextures';
 import { RAMPS, SPECIAL } from '../art/palette';
 import { Rng } from '../core/Rng';
 import { startNewGame } from '../core/Services';
+import { giveStarterKit } from '../systems/economy/Starter';
 import { t } from '../i18n';
 import { Button } from '../ui/Button';
 import { applySafeArea, setBackdrop } from '../ui/Layout';
@@ -183,7 +184,9 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private beginNewGame(): void {
-    startNewGame(getApp(this).services);
+    const state = startNewGame(getApp(this).services);
+    giveStarterKit(state);
+    getApp(this).services.autoSave.flush('newGame');
     overlay(this).transitionTo('Title', 'Hub');
   }
 

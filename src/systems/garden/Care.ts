@@ -15,6 +15,7 @@ import {
 } from '../../data/care';
 import type { SfxId } from '../../data/sfx';
 import type { PlantBase } from '../../data/plants';
+import { EXP_CARE_NORMAL, EXP_CARE_PERFECT, gainPlayerExp } from '../economy/PlayerLevel';
 import { gainAffection } from './Affection';
 import type { PlantEnv } from './Environment';
 import { recordAction } from './Quality';
@@ -114,6 +115,7 @@ export function finishCare(
     (perfect ? AFFECTION.gain.perfect : AFFECTION.gain.normal) + extraAffection,
     ctx.dateKey,
   );
+  gainPlayerExp(state, perfect ? EXP_CARE_PERFECT : EXP_CARE_NORMAL, ctx.bus);
   ctx.bus.emit('plant:cared', { uid: plant.uid, action, perfect });
   return gain.gained;
 }
