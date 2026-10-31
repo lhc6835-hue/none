@@ -15,12 +15,13 @@ import { canDeploy } from '../../systems/battle/Loadouts';
 import { Button } from '../../ui/Button';
 import { ensurePanel } from '../../ui/Frames';
 import { pixelText } from '../../ui/PixelText';
+import { PlantView } from '../../ui/PlantView';
 import type { ModalDef } from '../../ui/Modal';
 import { getApp } from '../context';
 
 const COLS = 6;
 const CELL_W = 64;
-const CELL_H = 62;
+const CELL_H = 72;
 const ROWS = 2;
 const COND_COLOR: Record<string, string> = {
   best: RAMPS.R9[2],
@@ -85,7 +86,6 @@ export function deckPickerModal(
           );
           return;
         }
-        const { atlas } = getApp(scene);
         list.slice(page * COLS * ROWS, (page + 1) * COLS * ROWS).forEach((p, i) => {
           const cx = (i % COLS) * CELL_W + CELL_W / 2;
           const cy = Math.floor(i / COLS) * CELL_H + CELL_H / 2;
@@ -100,22 +100,25 @@ export function deckPickerModal(
               ensurePanel(scene, on ? 'leaf' : 'stone', CELL_W - 4, CELL_H - 4),
             ),
           );
-          const tex = atlas.plant(
-            p.speciesId,
-            Math.max(3, Math.min(5, p.stage)) as Stage,
-            p.variant,
-          );
-          cell.add(scene.add.image(0, -6, tex.key, 'idle0'));
           cell.add(
-            pixelText(scene, 0, 14, plantDisplayName(p), {
+            new PlantView(scene, 0, -4, {
+              speciesId: p.speciesId,
+              stage: Math.max(3, Math.min(5, p.stage)) as Stage,
+              variant: p.variant,
+              seed: p.uid,
+            }),
+          );
+          cell.add(
+            pixelText(scene, 0, 2, plantDisplayName(p), {
               size: 7,
               anchorX: 0.5,
               color: SPECIAL.INK,
               wrapWidth: CELL_W - 8,
+              align: 'center',
             }),
           );
           cell.add(
-            pixelText(scene, 0, 22, `Lv${p.level} ${t(`condition.${cond}`)}`, {
+            pixelText(scene, 0, 26, `Lv${p.level} ${t(`condition.${cond}`)}`, {
               size: 7,
               anchorX: 0.5,
               color: COND_COLOR[cond],

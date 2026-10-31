@@ -9,6 +9,7 @@ import { OffsetClock } from './core/Clock';
 import { computeScreen } from './core/Screen';
 import { createServices, pickStorage } from './core/Services';
 import { setLanguage } from './i18n';
+import { createPlant, freeSlot, openSlots } from './systems/garden/Garden';
 import { ArtGalleryScene } from './scenes/ArtGalleryScene';
 import { BootScene } from './scenes/BootScene';
 import { DebugOverlay } from './scenes/DebugOverlay';
@@ -109,5 +110,32 @@ game.events.on(Phaser.Core.Events.POST_STEP, (_time: number, delta: number) => {
 });
 
 if (debug) {
-  (window as unknown as { __dotline: unknown }).__dotline = { game, services, audio, sfx, atlas };
+  // 디버그 전용: 테스트 · 스크린샷용 도우미(정원에 바로 자란 식물을 넣는다)
+  const grant = (speciesId: string, stage = 4, level = 5): string | null => {
+    const state = services.state;
+    if (!state) return null;
+    const zone = 'WINDOW' as const;
+    let slot = freeSlot(state, zone);
+    if (slot === null) {
+      state.garden.slotsOpen[zone] = openSlots(state, zone) + 1;
+      slot = freeSlot(state, zone);
+    }
+    if (slot === null) return null;
+    const plant = createPlant(state, speciesId, zone, slot, services.clock.now());
+    plant.stage = stage as typeof plant.stage;
+    plant.level = level;
+    plant.quality = 3;
+    plant.personality = 'BRAVE';
+    plant.gp = 1e6;
+    state.plants.push(plant);
+    return plant.uid;
+  };
+  (window as unknown as { __dotline: unknown }).__dotline = {
+    game,
+    services,
+    audio,
+    sfx,
+    atlas,
+    grant,
+  };
 }

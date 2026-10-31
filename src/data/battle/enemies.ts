@@ -135,7 +135,8 @@ export const ENEMIES: Record<string, EnemyDef> = {
     threat: 40,
     boss: true,
     tip: 'enemy.B1.tip',
-    tags: ['BOSS'],
+    // 체력 50%에서 날개가 돋아 4초간 비행: 출격 준비의 '대공 안내' 태그에 포함
+    tags: ['BOSS', 'AIR'],
     ability: 'APHID_QUEEN',
   },
 };

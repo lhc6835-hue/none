@@ -66,6 +66,8 @@ export function showResult(
 ): void {
   const app = getApp(s);
   const won = result.won;
+  // 화면 어디를 눌러도 건너뛰기(root 보다 먼저 만들어 버튼 아래에 놓는다)
+  const skip = s.add.zone(0, 0, 640, 360).setOrigin(0, 0).setInteractive().setDepth(D);
   const root = s.add.container(0, 0).setDepth(D);
   root.add(s.add.image(0, 0, ensureVeil(s)).setOrigin(0, 0));
   const W = 440;
@@ -140,10 +142,10 @@ export function showResult(
   const mvpTower = result.mvp !== null ? s.sim.towerById(result.mvp) : null;
   if (won && mvpTower) {
     step(() => {
-      const box = s.add.container(X + 62, Y + 150);
+      const box = s.add.container(X + 62, Y + 154);
       root.add(box);
-      box.add(s.add.image(0, 0, ensurePanel(s, 'leaf', 92, 112)));
-      const view = new PlantView(s, 0, 28, {
+      box.add(s.add.image(0, 0, ensurePanel(s, 'leaf', 92, 124)));
+      const view = new PlantView(s, 0, 22, {
         speciesId: mvpTower.spec.id,
         stage: Math.max(3, Math.min(5, mvpTower.load.stage)) as Stage,
         expression: 'excited',
@@ -171,15 +173,28 @@ export function showResult(
     });
   } else if (!won) {
     step(() => {
-      const tip = pixelText(s, 320, Y + 98, defeatTip(s), {
-        size: 9,
-        anchorX: 0.5,
-        anchorY: 0,
-        color: SPECIAL.INK,
-        wrapWidth: W - 40,
-        align: 'center',
-      });
-      root.add(tip);
+      const box = s.add.container(X + 62, Y + 154);
+      root.add(box);
+      box.add(s.add.image(0, 0, ensurePanel(s, 'leaf', 92, 124)));
+      box.add(
+        pixelText(s, 0, -52, t('result.tip'), {
+          size: 9,
+          bold: true,
+          anchorX: 0.5,
+          color: RAMPS.R7[3],
+        }),
+      );
+      box.add(
+        pixelText(s, 0, -36, defeatTip(s), {
+          size: 7,
+          anchorX: 0.5,
+          color: SPECIAL.INK,
+          wrapWidth: 80,
+          align: 'center',
+        }),
+      );
+      box.setScale(0.6);
+      s.tweens.add({ targets: box, scale: 1, duration: 220, ease: 'Back.easeOut' });
     });
   }
 
@@ -201,10 +216,10 @@ export function showResult(
         );
         const b = before.get(g.uid);
         row.add(pixelText(s, 0, 9, `Lv${b?.level ?? g.level}`, { size: 7, color: RAMPS.R10[1] }));
-        const barW = 150;
-        const frame = s.add.rectangle(46, 10, barW, 7, toInt(SPECIAL.INK)).setOrigin(0, 0.5);
-        const track = s.add.rectangle(47, 10, barW - 2, 5, toInt(RAMPS.R10[1])).setOrigin(0, 0.5);
-        const fill = s.add.rectangle(47, 10, 0, 5, toInt(RAMPS.R9[3])).setOrigin(0, 0.5);
+        const barW = 128;
+        const frame = s.add.rectangle(84, 10, barW, 7, toInt(SPECIAL.INK)).setOrigin(0, 0.5);
+        const track = s.add.rectangle(85, 10, barW - 2, 5, toInt(RAMPS.R10[1])).setOrigin(0, 0.5);
+        const fill = s.add.rectangle(85, 10, 0, 5, toInt(RAMPS.R9[3])).setOrigin(0, 0.5);
         row.add([frame, track, fill]);
         const need = expToNextPlant(base.level);
         const frac = base.level >= 30 ? 1 : base.exp / need;
@@ -222,7 +237,7 @@ export function showResult(
           onComplete: () => {
             if (g.levelUps > 0) {
               app.sfx.play('stage_up');
-              const up = pixelText(s, 46 + barW + 6, 4, t('result.levelUp', { n: g.level }), {
+              const up = pixelText(s, 84 + barW + 38, 4, t('result.levelUp', { n: g.level }), {
                 size: 9,
                 bold: true,
                 color: RAMPS.R9[2],
@@ -234,7 +249,7 @@ export function showResult(
           },
         });
         row.add(
-          pixelText(s, 46 + barW + 6, 4, `+${g.exp}`, {
+          pixelText(s, 84 + barW + 6, 4, `+${g.exp}`, {
             size: 7,
             color: g.levelUps > 0 ? SPECIAL.PAPER : RAMPS.R10[1],
           }),
@@ -320,9 +335,7 @@ export function showResult(
     },
   });
   s.time.delayedCall(180, run);
-  root.setSize(640, 360);
-  root.setInteractive(new Phaser.Geom.Rectangle(0, 0, 640, 360), Phaser.Geom.Rectangle.Contains);
-  root.on('pointerdown', () => {
+  skip.on('pointerdown', () => {
     while (idx < steps.length) run();
     timer.remove();
   });

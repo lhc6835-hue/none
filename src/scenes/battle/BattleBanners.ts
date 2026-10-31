@@ -51,7 +51,7 @@ export function stageBanner(s: BattleScene, title: string, sub: string): void {
 }
 
 export function waveBanner(s: BattleScene, text: string): void {
-  slideBanner(s, text, null, { y: 46, w: 150, hold: 900 });
+  slideBanner(s, text, null, { y: 70, w: 150, hold: 900 });
 }
 
 export function bossBanner(s: BattleScene, name: string): void {

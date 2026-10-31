@@ -5,7 +5,7 @@
 - 기획서: [docs/README.md](docs/README.md)(분할본) · [docs/GDD-full.md](docs/GDD-full.md)(통합본)
 - 구현 가이드: [docs/13-roadmap-qa.md](docs/13-roadmap-qa.md)의 「마스터 프롬프트」부터 시작
 
-현재 상태: **M0(프로젝트 뼈대) · M1(아트 파이프라인 · 얼굴) · M2(정원 · 돌봄 코어) 완료**(M2 의 '사람이 직접 30분 플레이' 확인만 남음 — `docs/DECISIONS.md`). 다음은 M3(전투 코어).
+현재 상태: **M0(프로젝트 뼈대) · M1(아트 파이프라인 · 얼굴) · M2(정원 · 돌봄 코어) · M3(전투 코어: 챕터 1 · 식물 100종 능력) 완료**(M2 · M3 의 '사람이 직접 플레이' 확인만 남음 — `docs/DECISIONS.md`). 다음은 M4(콘텐츠 완성: 챕터 2–7 · 적 · 보스 · 교배).
 
 ```
 npm install            # 의존성 설치 (.npmrc 에 legacy-peer-deps 설정이 들어 있음)
@@ -16,7 +16,9 @@ npm run test:e2e       # 브라우저 E2E · 스크린샷 (Playwright, 1280×720
 npm run build          # 타입 검사 + 프로덕션 빌드(dist/)
 npx tsx scripts/art-preview.ts out.png --cols=10 --stages=5 --faces=1   # 식물 시트 PNG
 npx tsx scripts/face-audit.ts      # 얼굴 검수(모든 종 × 단계 × 색변이)
+npm run sim -- all NORMAL 10   # 봇으로 스테이지 클리어율 · 새는 하트 측정(스테이지 · 난이도 · 판 수 · 덱)
 # 디버그 씬: http://localhost:5173/?debug=1&scene=ArtGallery  (또는 UIKit)
+# 능력 시연:  http://localhost:5173/?debug=1&scene=AbilityDemo&plant=P011  (◀ ▶ 로 100종 넘기기)
 ```
 
 진행 기록과 기획서와 다르게 정한 내용은 [docs/DECISIONS.md](docs/DECISIONS.md), 스크린샷은 `docs/screenshots/` 에 있다.

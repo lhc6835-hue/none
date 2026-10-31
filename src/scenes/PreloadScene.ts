@@ -9,10 +9,11 @@ import { t } from '../i18n';
 import { ensureButton, ensurePanel, type ButtonState } from '../ui/Frames';
 import { applySafeArea, setBackdrop } from '../ui/Layout';
 import { pixelText } from '../ui/PixelText';
+import { demoData } from './battle/BattleDemo';
 import { getApp } from './context';
 import { overlay } from './UIOverlay';
 
-const DEBUG_SCENES = ['ArtGallery', 'UIKit'];
+const DEBUG_SCENES = ['ArtGallery', 'UIKit', 'AbilityDemo'];
 const BAR_W = 160;
 const BAR_X = 320 - BAR_W / 2;
 const BAR_Y = 188;
@@ -105,6 +106,11 @@ export class PreloadScene extends Phaser.Scene {
     const direct = new URLSearchParams(window.location.search).get('scene');
     const target =
       getApp(this).services.debug && direct && DEBUG_SCENES.includes(direct) ? direct : 'Title';
+    if (target === 'AbilityDemo') {
+      const plant = new URLSearchParams(window.location.search).get('plant') ?? 'P011';
+      overlay(this).transitionTo('Preload', 'Battle', demoData(plant));
+      return;
+    }
     overlay(this).transitionTo('Preload', target);
   }
 }

@@ -16,7 +16,8 @@ import { ensurePanel } from '../../ui/Frames';
 import { iconTexture, markTexture } from '../../ui/IconTex';
 import { numberText } from '../../ui/NumberFont';
 import { pixelText } from '../../ui/PixelText';
-import { getApp } from '../context';
+import { PlantView } from '../../ui/PlantView';
+import type { Stage } from '../../art/bodies/Ctx';
 import { RollingNumber } from '../hub/HubHud';
 
 export interface BattleHudHandlers {
@@ -128,7 +129,6 @@ export class BattleHud {
 
   private buildCards(): void {
     const sc = this.scene;
-    const { atlas } = getApp(sc);
     ensureDim(sc);
     this.sim.deck.forEach((load, i) => {
       const spec = PLANT_BATTLE_BY_ID.get(load.speciesId)!;
@@ -137,8 +137,11 @@ export class BattleHud {
       const x = 8 + i * 47;
       const box = sc.add.container(x + 22, 336).setDepth(D + 1);
       const bg = sc.add.image(0, 0, ensurePanel(sc, 'leaf', 44, 44)).setOrigin(0.5);
-      const tex = atlas.plant(load.speciesId, Math.max(3, Math.min(5, load.stage)) as 3, false);
-      const img = sc.add.image(0, -2, tex.key, 'idle0').setOrigin(0.5, 0.5);
+      const img = new PlantView(sc, 0, 12, {
+        speciesId: load.speciesId,
+        stage: Math.max(3, Math.min(5, load.stage)) as Stage,
+        seed: `card${i}`,
+      });
       const mark = sc.add.image(-17, -17, markTexture(sc, g.mark, g.color));
       const dim = sc.add.image(0, 0, DIM).setVisible(false);
       const costNum = numberText(

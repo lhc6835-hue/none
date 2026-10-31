@@ -638,5 +638,6 @@
   "sortie.sulkyTitle": "점박이",
   "sortie.sulkyBody": "{name|이/가} 기운이 없어요. 쓰다듬어 줄까요?",
   "sortie.sulkyCare": "돌보러 가기",
-  "sortie.sulkyTake": "그래도 데려가기"
+  "sortie.sulkyTake": "그래도 데려가기",
+  "result.tip": "이렇게 해 봐요"
 }

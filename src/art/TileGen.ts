@@ -71,15 +71,14 @@ export function generateTile(chapter: number, kind: TileKind, variant: number): 
       break;
     case 'soil':
     case 'fertile': {
-      // 배치 가능한 흙: 가운데가 볼록한 둔덕
+      // 배치 가능한 흙: 풀밭 위의 작은 갈아 놓은 흙 자리(전체가 이 타일일 수 있어 대비를 낮춘다)
       fill(t.floor[2]);
       speckle(12, t.floor[1]);
-      for (let y = 4; y < 20; y++) {
-        const half = Math.round(10 * Math.sqrt(Math.max(0, 1 - ((y - 12) / 8.5) ** 2)));
-        for (let x = 12 - half; x < 12 + half; x++)
-          put(x, y, y < 9 ? RAMPS.R10[3] : y > 15 ? RAMPS.R10[1] : RAMPS.R10[2]);
+      for (let y = 8; y < 19; y++) {
+        const half = Math.round(8 * Math.sqrt(Math.max(0, 1 - ((y - 13) / 5.5) ** 2)));
+        for (let x = 12 - half; x < 12 + half; x++) put(x, y, y < 11 ? RAMPS.R10[2] : RAMPS.R10[1]);
       }
-      speckle(10, RAMPS.R10[4]);
+      speckle(6, RAMPS.R10[2]);
       if (kind === 'fertile') {
         // 비옥한 흙: 반짝이는 표시
         for (const [x, y] of [

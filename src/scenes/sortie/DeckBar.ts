@@ -11,6 +11,7 @@ import { Button } from '../../ui/Button';
 import { ensurePanel } from '../../ui/Frames';
 import { iconTexture } from '../../ui/IconTex';
 import { pixelText } from '../../ui/PixelText';
+import { PlantView } from '../../ui/PlantView';
 import { getApp } from '../context';
 import type { SortieScene } from '../SortieScene';
 import { conditionKey } from './DeckPicker';
@@ -40,17 +41,19 @@ export function build(s: SortieScene, stageId: string): void {
     const x = 16 + i * 52;
     const uid = s.deck[i];
     const p = uid ? s.state.plants.find((q) => q.uid === uid) : undefined;
-    const slot = s.add.container(x + 24, 52);
-    slot.add(s.add.image(0, 0, ensurePanel(s, p ? 'leaf' : 'stone', 48, 56)));
+    const slot = s.add.container(x + 24, 62);
+    slot.add(s.add.image(0, 0, ensurePanel(s, p ? 'leaf' : 'stone', 48, 72)));
     if (p) {
-      const tex = app.atlas.plant(
-        p.speciesId,
-        Math.max(3, Math.min(5, p.stage)) as Stage,
-        p.variant,
-      );
-      slot.add(s.add.image(0, -6, tex.key, 'idle0'));
       slot.add(
-        pixelText(s, 0, 14, plantDisplayName(p), {
+        new PlantView(s, 0, -2, {
+          speciesId: p.speciesId,
+          stage: Math.max(3, Math.min(5, p.stage)) as Stage,
+          variant: p.variant,
+          seed: p.uid,
+        }),
+      );
+      slot.add(
+        pixelText(s, 0, 4, plantDisplayName(p), {
           size: 7,
           anchorX: 0.5,
           wrapWidth: 44,
@@ -59,7 +62,7 @@ export function build(s: SortieScene, stageId: string): void {
       );
       const cond = conditionKey(s.state, p, now);
       slot.add(
-        pixelText(s, 0, 23, `Lv${p.level} ${t(`condition.${cond}`)}`, {
+        pixelText(s, 0, 25, `Lv${p.level} ${t(`condition.${cond}`)}`, {
           size: 7,
           anchorX: 0.5,
           color: cond === 'sulky' ? RAMPS.R7[3] : RAMPS.R10[1],
@@ -76,8 +79,8 @@ export function build(s: SortieScene, stageId: string): void {
         }),
       );
     }
-    slot.setSize(48, 56);
-    slot.setInteractive(new Phaser.Geom.Rectangle(0, 0, 48, 56), Phaser.Geom.Rectangle.Contains);
+    slot.setSize(48, 72);
+    slot.setInteractive(new Phaser.Geom.Rectangle(0, 0, 48, 72), Phaser.Geom.Rectangle.Contains);
     slot.on('pointerdown', () => {
       app.sfx.play('ui_open');
       s.openPicker();
@@ -88,31 +91,31 @@ export function build(s: SortieScene, stageId: string): void {
   const tx = 16 + slots * 52 + 8;
   box.add(pixelText(s, tx, 6, t('sortie.tools'), { size: 9, bold: true }));
   s.tools.forEach((id, k) => {
-    const slot = s.add.container(tx + 20 + k * 44, 52);
-    slot.add(s.add.image(0, 0, ensurePanel(s, 'stone', 40, 56)));
-    slot.add(s.add.image(0, -8, iconTexture(s, TOOL_ICON[id] ?? 'hand')));
+    const slot = s.add.container(tx + 20 + k * 44, 62);
+    slot.add(s.add.image(0, 0, ensurePanel(s, 'stone', 40, 72)));
+    slot.add(s.add.image(0, -16, iconTexture(s, TOOL_ICON[id] ?? 'hand')));
     slot.add(
-      pixelText(s, 0, 8, t(GARDEN_TOOLS[id].nameKey), {
+      pixelText(s, 0, 2, t(GARDEN_TOOLS[id].nameKey), {
         size: 7,
         anchorX: 0.5,
         wrapWidth: 38,
         align: 'center',
       }),
     );
-    slot.setSize(40, 56);
-    slot.setInteractive(new Phaser.Geom.Rectangle(0, 0, 40, 56), Phaser.Geom.Rectangle.Contains);
+    slot.setSize(40, 72);
+    slot.setInteractive(new Phaser.Geom.Rectangle(0, 0, 40, 72), Phaser.Geom.Rectangle.Contains);
     slot.on('pointerdown', () => s.cycleTool(k));
     box.add(slot);
   });
   // 버튼
-  const rec = new Button(s, 548, 36, {
+  const rec = new Button(s, 548, 40, {
     w: 120,
     h: 20,
     label: t('sortie.recommend'),
     size: 9,
     onClick: () => s.recommend(stageId),
   });
-  const go = new Button(s, 548, 72, {
+  const go = new Button(s, 548, 78, {
     w: 120,
     h: 28,
     label: t('sortie.go'),
@@ -123,6 +126,6 @@ export function build(s: SortieScene, stageId: string): void {
   });
   box.add([rec, go]);
   box.add(
-    pixelText(s, 548, 104, t('sortie.empty'), { size: 7, anchorX: 0.5, color: RAMPS.R10[1] }),
+    pixelText(s, 548, 106, t('sortie.empty'), { size: 7, anchorX: 0.5, color: RAMPS.R10[1] }),
   );
 }

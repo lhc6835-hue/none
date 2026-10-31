@@ -114,7 +114,7 @@ export class SortieScene extends Phaser.Scene {
   }
 
   private header(): void {
-    new Button(this, 40, 4, {
+    new Button(this, 40, 12, {
       w: 64,
       h: 16,
       label: t('sortie.back'),
@@ -230,27 +230,27 @@ export class SortieScene extends Phaser.Scene {
     this.info = info;
     info.add(this.add.image(0, 0, ensurePanel(this, 'wood', 320, 196)).setOrigin(0, 0));
     info.add(pixelText(this, 10, 8, `${st.id}  ${t(`stage.${st.id}`)}`, { size: 14, bold: true }));
-    info.add(
-      pixelText(this, 10, 26, t(`stage.${st.id}.desc`), {
-        size: 9,
-        color: RAMPS.R10[1],
-        wrapWidth: 300,
-      }),
-    );
+    const desc = pixelText(this, 10, 26, t(`stage.${st.id}.desc`), {
+      size: 9,
+      color: RAMPS.R10[1],
+      wrapWidth: 300,
+    });
+    info.add(desc);
     // 적 미리보기
-    info.add(pixelText(this, 10, 54, t('sortie.enemies'), { size: 9, bold: true }));
+    const y0 = Math.round(26 + desc.height + 2);
+    info.add(pixelText(this, 10, y0, t('sortie.enemies'), { size: 9, bold: true }));
     enemiesOf(st).forEach((id, k) => {
       const def = ENEMIES[id];
       if (!def) return;
-      const x = 18 + k * 34;
+      const x = 26 + k * 48;
       info.add(
-        this.add.image(x, 80, enemyTexture(this, id, Math.min(20, def.size), 0, !!def.flying)),
+        this.add.image(x, y0 + 26, enemyTexture(this, id, Math.min(20, def.size), 0, !!def.flying)),
       );
       info.add(
-        pixelText(this, x, 94, t(def.nameKey), {
+        pixelText(this, x, y0 + 38, t(def.nameKey), {
           size: 7,
           anchorX: 0.5,
-          wrapWidth: 36,
+          wrapWidth: 46,
           align: 'center',
         }),
       );
@@ -260,7 +260,7 @@ export class SortieScene extends Phaser.Scene {
       pixelText(
         this,
         10,
-        118,
+        y0 + 62,
         tags.length ? tags.map((x) => `#${t(`tag.${x}`)}`).join(' ') : t('tag.NONE'),
         {
           size: 9,
@@ -269,13 +269,13 @@ export class SortieScene extends Phaser.Scene {
       ),
     );
     // 난이도
-    info.add(pixelText(this, 10, 134, t('sortie.difficulty'), { size: 9, bold: true }));
+    info.add(pixelText(this, 10, 136, t('sortie.difficulty'), { size: 9, bold: true }));
     DIFFICULTY_ORDER.forEach((id, k) => {
       const d = DIFFICULTY[id];
       const lock = lv < d.unlockLevel;
       const sel = id === this.difficulty;
       info.add(
-        new Button(this, 10 + 30 + k * 60, 156, {
+        new Button(this, 10 + 30 + k * 60, 160, {
           w: 56,
           h: 18,
           label: lock ? `Lv${d.unlockLevel}` : t(d.nameKey),
@@ -300,7 +300,7 @@ export class SortieScene extends Phaser.Scene {
       pixelText(
         this,
         10,
-        178,
+        180,
         t('sortie.diffLine', {
           hearts: d.hearts,
           hp: Math.round(d.hpMul * 100),

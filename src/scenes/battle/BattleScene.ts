@@ -23,6 +23,7 @@ import { drainEvents } from './BattleEvents';
 import { BattleView } from './BattleView';
 import { FxLayer, MAP_X, MAP_Y, TILE, px, py } from './FxLayer';
 import * as banners from './BattleBanners';
+import { setupDemo, tickDemo } from './BattleDemo';
 import * as ending from './BattleEnding';
 
 export interface BattleSceneData {
@@ -37,6 +38,8 @@ export interface BattleSceneData {
   practice?: boolean;
   /** 나갈 때 돌아갈 씬(기본: 정원) */
   returnTo?: string;
+  /** 능력 시연: 이 종 하나를 심고 적을 계속 흘려 보낸다 */
+  demo?: string;
 }
 
 const STEP = 1 / 60;
@@ -54,6 +57,7 @@ export class BattleScene extends Phaser.Scene {
   acc = 0;
   ended = false;
   lastHitSfx = 0;
+  skipBanner = false;
   /** 이번 판에 실제로 심은 식물(uid → 기여) */
   placedUids = new Set<string>();
   selectedCard = -1;
@@ -140,7 +144,7 @@ export class BattleScene extends Phaser.Scene {
       .setDepth(2);
     zone.on('pointerdown', (p: Phaser.Input.Pointer) => this.onMapTap(p));
     this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
-      this.view.hover = { x: p.x, y: p.y };
+      this.view.hover = { x: p.x - safeLeft(this), y: p.y };
     });
     this.bindKeys();
     const onVis = (): void => {
@@ -150,12 +154,14 @@ export class BattleScene extends Phaser.Scene {
     this.offs.push(() => document.removeEventListener('visibilitychange', onVis));
     this.events.once('shutdown', () => this.teardown());
 
+    if (data.demo) setupDemo(this);
     // 시작 안내: 첫 웨이브 전 준비 시간
-    banners.stageBanner(
-      this,
-      `${stage.id}  ${t(`stage.${stage.id}`)}`,
-      t(`diff.${data.difficulty}`),
-    );
+    if (!this.skipBanner)
+      banners.stageBanner(
+        this,
+        `${stage.id}  ${t(`stage.${stage.id}`)}`,
+        t(`diff.${data.difficulty}`),
+      );
     if (getApp(this).services.debug)
       (window as unknown as { __battle?: BattleScene }).__battle = this;
   }
@@ -178,7 +184,8 @@ export class BattleScene extends Phaser.Scene {
       kb.on(`keydown-${key}`, fn);
       this.offs.push(() => kb.off(`keydown-${key}`, fn));
     };
-    for (let i = 1; i <= 8; i++) on(String(i), () => this.pickCard(i - 1));
+    const digits = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT'];
+    digits.forEach((name, i) => on(name, () => this.pickCard(i)));
     on('Q', () => this.pickTool(0));
     on('W', () => this.pickTool(1));
     on('SPACE', () => this.togglePause());
@@ -248,10 +255,12 @@ export class BattleScene extends Phaser.Scene {
 
   // ===== 맵 탭 =====
   private onMapTap(p: Phaser.Input.Pointer): void {
-    if (this.ended || this.hud.overUi(p.x, p.y)) return;
+    // 포인터는 캔버스 좌표라서, 안전 영역(640×360) 왼쪽 여백만큼 빼야 장면 좌표가 된다
+    const px0 = p.x - safeLeft(this);
+    if (this.ended || this.hud.overUi(px0, p.y)) return;
     const sim = this.sim;
     const app = getApp(this);
-    const tx = Math.floor((p.x - MAP_X) / TILE);
+    const tx = Math.floor((px0 - MAP_X) / TILE);
     const ty = Math.floor((p.y - MAP_Y) / TILE);
     if (tx < 0 || ty < 0 || tx >= 26 || ty >= 12) return;
     if (this.toolSlot >= 0) {
@@ -398,6 +407,7 @@ export class BattleScene extends Phaser.Scene {
       this.acc += dt * this.speed;
       let n = 0;
       while (this.acc >= STEP && n < MAX_STEPS) {
+        if (this.data0.demo) tickDemo(this);
         this.sim.step();
         this.acc -= STEP;
         n++;

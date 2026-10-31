@@ -157,11 +157,14 @@ export class Button extends Phaser.GameObjects.Container {
   }
 
   setLabel(text: string): this {
+    if (this.labelText.text === text) return this;
     this.labelText.setText(text);
     return this;
   }
 
   setDisabled(disabled: boolean): this {
+    // 매 프레임 불러도 누름 상태를 지우지 않도록, 바뀔 때만 적용한다
+    if (disabled === (this.btnState === 'disabled')) return this;
     this.applyState(disabled ? 'disabled' : this.hovering ? 'hover' : 'normal');
     return this;
   }
