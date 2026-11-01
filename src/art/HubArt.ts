@@ -172,16 +172,59 @@ export function hillTexture(scene: Phaser.Scene, phase: DayPhase): string {
     phase
   ];
   const c = new PixelCanvas(HILL_W, H);
+  // 아주 먼 산맥(하늘빛에 묻힌 색) + 눈 덮인 봉우리
+  const haze = { DAY: RAMPS.R4[3], DAWN: RAMPS.R5[3], DUSK: RAMPS.R5[3], NIGHT: RAMPS.R4[0] }[
+    phase
+  ];
+  const snow = { DAY: SPECIAL.PAPER, DAWN: RAMPS.R6[4], DUSK: RAMPS.R6[4], NIGHT: RAMPS.R4[1] }[
+    phase
+  ];
+  for (let px0 = 30; px0 < HILL_W; px0 += 120 + ((px0 * 7) % 70)) {
+    const h = 34 + ((px0 * 13) % 26);
+    const top = 226 - h;
+    for (let y = top; y < 230; y++) {
+      const half = Math.floor((y - top) * 1.3) + 1;
+      c.hline(px0 - half, y, half * 2, haze);
+      if (y - top < 5) c.hline(px0 - half + 1, y, Math.max(1, half * 2 - 2), snow);
+    }
+  }
   hills(c, 226, 22, 70, 0, far);
+  // 먼 언덕 위 어미나무(세계관의 심장): 큰 수관 실루엣 + 금빛 반짝이
+  const mx = Math.floor(HILL_W * 0.72);
+  const my = Math.round(226 + Math.sin(mx / 70) * 22 + Math.sin(mx / 25.9) * 6.6);
+  c.rect(mx - 3, my - 30, 6, 32, far);
+  for (const [dx, dy, r] of [
+    [0, -44, 16],
+    [-16, -36, 11],
+    [16, -36, 12],
+    [-7, -54, 10],
+    [9, -55, 10],
+  ] as const)
+    c.disc(mx + dx, my + dy, r, far);
+  if (phase !== 'DAY')
+    for (const [dx, dy] of [
+      [-8, -48],
+      [6, -40],
+      [12, -54],
+      [-14, -36],
+    ] as const)
+      c.px(mx + dx, my + dy, SPECIAL.STARGOLD);
   hills(c, 262, 18, 55, 90, near, nearTop);
-  // 먼 숲: 작은 나무 실루엣
+  // 가까운 숲: 둥근 활엽수와 뾰족한 침엽수(윗면 밝은 색)
   const rng = new Rng('hub-forest');
   for (let i = 0; i < 70; i++) {
     const x = rng.int(0, HILL_W - 1);
     const y = Math.round(262 + Math.sin((x + 90) / 55) * 18 + Math.sin((x + 90) / 20.35) * 5.4);
-    const h = rng.int(6, 12);
-    c.rect(x, y - h, 3, h, near);
-    c.rect(x - 1, y - h + 2, 5, 3, near);
+    if (rng.chance(0.4)) {
+      const h = rng.int(8, 13);
+      for (let j = 0; j < h; j++)
+        c.hline(x - Math.floor(j / 2), y - h + j, Math.floor(j / 2) * 2 + 1, near);
+      c.px(x, y - h, nearTop).px(x, y - h + 1, nearTop);
+    } else {
+      const r = rng.int(3, 6);
+      c.disc(x, y - r + 1, r, near);
+      c.hline(x - r + 2, y - 2 * r + 2, Math.max(1, r - 1), nearTop);
+    }
   }
   return c.toTexture(scene, key);
 }

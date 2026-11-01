@@ -7,6 +7,7 @@ import {
   clickGame,
   findButton,
   ko,
+  passHowTo,
   settle,
   strayColors,
   visibleTexts,
@@ -34,6 +35,7 @@ const DECK = ['P011', 'P001', 'P031', 'P041', 'P012'];
 async function newGameWithPlants(page: Page): Promise<string[]> {
   await bootToTitle(page);
   await clickGame(page, 268, 332);
+  await passHowTo(page);
   await waitForScene(page, 'Hub');
   return page.evaluate((ids) => {
     const d = window.__dotline as any;

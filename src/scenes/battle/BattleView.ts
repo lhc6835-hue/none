@@ -3,9 +3,8 @@
 import Phaser from 'phaser';
 import { enemyTexture } from '../../art/EnemyArt';
 import { gridToCanvas } from '../../art/GridCanvas';
-import { PixelCanvas } from '../../art/PixelCanvas';
 import { generateMound } from '../../art/PotSpriteGen';
-import { generateTile, TILE_SIZE, type TileKind } from '../../art/TileGen';
+import { bakeBattleMap, buildEntryArt, buildRootsArt } from '../../art/BattleMapArt';
 import { RAMPS, SPECIAL, toInt } from '../../art/palette';
 import type { Stage } from '../../art/bodies/Ctx';
 import { rampColor } from '../../art/BattleFx';
@@ -16,17 +15,6 @@ import type { Tower } from '../../systems/battle/types';
 import type { Expression } from '../../art/FaceRenderer';
 import { PlantView } from '../../ui/PlantView';
 import { FxLayer, MAP_X, MAP_Y, TILE, px, py } from './FxLayer';
-
-const TILE_OF: Record<string, TileKind> = {
-  SOIL: 'soil',
-  FERTILE: 'fertile',
-  SHADE: 'shade',
-  WATER: 'water',
-  PATH: 'path',
-  ROCK: 'rock',
-  ENTRY: 'path',
-  EXIT: 'path',
-};
 
 const STATUS_COLOR: Partial<Record<StatusKind, string>> = {
   SLOW: RAMPS.R4[3],
@@ -75,48 +63,27 @@ export class BattleView {
   }
 
   // ===== 맵 =====
+  /** 맵 한 장(이웃을 보고 둥글린 길 · 물가 · 소품)과 입구 굴 · 출구 어미나무 뿌리 */
   private bakeMap(): void {
     const sim = this.sim;
     const key = `battle:map:${sim.stage.id}`;
-    if (!this.scene.textures.exists(key)) {
-      const cv = document.createElement('canvas');
-      cv.width = 26 * TILE;
-      cv.height = 12 * TILE;
-      const ctx = cv.getContext('2d')!;
-      ctx.imageSmoothingEnabled = false;
-      sim.map.tiles.forEach((row, y) =>
-        row.forEach((k, x) => {
-          const g = generateTile(sim.stage.chapter, TILE_OF[k], (x * 7 + y * 13) % 4);
-          ctx.drawImage(gridToCanvas(g), x * TILE, y * TILE, TILE_SIZE, TILE_SIZE);
-        }),
-      );
-      this.scene.textures.addCanvas(key, cv);
-    }
+    if (!this.scene.textures.exists(key))
+      bakeBattleMap(sim.stage.chapter, sim.map.tiles).toTexture(this.scene, key);
     this.scene.add.image(MAP_X, MAP_Y, key).setOrigin(0, 0).setDepth(1);
-    // 출구: 어미나무 뿌리(16×16) · 입구: 점선 화살표
+    if (!this.scene.textures.exists('battle:roots2'))
+      buildRootsArt().toTexture(this.scene, 'battle:roots2');
+    if (!this.scene.textures.exists('battle:entry'))
+      buildEntryArt().toTexture(this.scene, 'battle:entry');
     const ex = sim.map.exit;
-    const rk = 'battle:roots';
-    if (!this.scene.textures.exists(rk)) {
-      const c = new PixelCanvas(20, 20);
-      c.rect(8, 2, 4, 14, RAMPS.R10[2])
-        .rect(2, 12, 16, 3, RAMPS.R10[2])
-        .rect(4, 15, 3, 4, RAMPS.R10[1])
-        .rect(13, 15, 3, 4, RAMPS.R10[1]);
-      c.rect(9, 2, 1, 12, RAMPS.R10[3])
-        .px(5, 12, RAMPS.R10[3])
-        .rect(7, 0, 6, 3, RAMPS.R1[2])
-        .px(9, 0, RAMPS.R1[3]);
-      c.toTexture(this.scene, rk);
-    }
     this.scene.add
-      .image(px(ex.x) + 12, py(ex.y) + 20, rk)
+      .image(px(ex.x) + 12, py(ex.y) + 22, 'battle:roots2')
       .setOrigin(0.5, 1)
       .setDepth(5);
-    for (const e of sim.map.entries) {
-      const g = this.scene.add.graphics().setDepth(5);
-      g.fillStyle(toInt(RAMPS.R9[3]), 1);
-      for (let i = 0; i < 3; i++) g.fillRect(px(e.x) + 6 + i * 5, py(e.y) + 11, 3, 2);
-    }
+    for (const e of sim.map.entries)
+      this.scene.add
+        .image(px(e.x) + 12, py(e.y) + 12, 'battle:entry')
+        .setOrigin(0.5, 0.5)
+        .setDepth(2);
   }
 
   // ===== 매 프레임 =====

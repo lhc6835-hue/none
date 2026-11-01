@@ -4,19 +4,20 @@ import { mkdirSync } from 'node:fs';
 import { RAMPS } from '../../src/art/palette';
 import { computeScreen } from '../../src/core/Screen';
 import {
+  activeScenes as activeKeys,
   backToTitle,
   bootToTitle,
   canvasRect,
   clickGame,
   en,
-  ko,
   findButton,
+  ko,
+  passHowTo,
   pixelAt,
   settle,
   strayColors,
   visibleTexts,
   waitForScene,
-  activeScenes as activeKeys,
 } from './helpers';
 
 const SHOT_DIR = 'docs/screenshots';
@@ -128,6 +129,7 @@ test.describe('M0 — 저장 · 설정', () => {
     await bootToTitle(page);
     expect(await page.evaluate(() => localStorage.getItem('dotline.save.v1'))).toBeNull();
     await clickGame(page, 268, 332); // 새로 시작 (저장이 없으니 확인창 없이 시작)
+    await passHowTo(page); // 게임 방법 창 → 알겠어요
     await waitForScene(page, 'Hub');
     expect(await page.evaluate(() => localStorage.getItem('dotline.save.v1'))).not.toBeNull();
 
@@ -151,6 +153,7 @@ test.describe('M0 — 저장 · 설정', () => {
   }) => {
     await bootToTitle(page);
     await clickGame(page, 268, 332);
+    await passHowTo(page);
     await waitForScene(page, 'Hub');
     const saved = await page.evaluate(() => localStorage.getItem('dotline.save.v1'));
     expect(saved).not.toBeNull();
@@ -181,6 +184,7 @@ test.describe('M0 — 저장 · 설정', () => {
   }) => {
     await bootToTitle(page);
     await clickGame(page, 268, 332);
+    await passHowTo(page);
     await waitForScene(page, 'Hub');
     await page.evaluate(() => {
       const s = window.__dotline!.services as unknown as { state: { player: { coin: number } } };
@@ -196,6 +200,7 @@ test.describe('M0 — 저장 · 설정', () => {
     await page.waitForTimeout(500);
     const yes = await findButton(page, 'UIOverlay', ko['title.newGameConfirm.yes']);
     await clickGame(page, yes.x, yes.y);
+    await passHowTo(page);
     await waitForScene(page, 'Hub');
     const backup = await page.evaluate(() =>
       JSON.parse(localStorage.getItem('dotline.save.backup') ?? 'null'),
@@ -212,6 +217,7 @@ test.describe('M0 — 저장 · 설정', () => {
   test('본 저장이 손상되면 직전 저장본으로 복구하고 안내한다', async ({ page }) => {
     await bootToTitle(page);
     await clickGame(page, 268, 332);
+    await passHowTo(page);
     await waitForScene(page, 'Hub');
     // 두 번째 저장을 만들어 첫 저장이 백업으로 밀려나게 한다
     await page.evaluate(() => {

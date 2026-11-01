@@ -1,8 +1,10 @@
-// 타이틀 (10문서 1-3절): 새벽빛이 드는 온실 한 장면 + 이어하기 · 새로 시작 · 설정 · 만든 사람들.
-// 아무 데나 눌러도 이어하기. 식물 얼굴과 로고 눈(ㅇ) 연출은 FaceRenderer(M1) 이후에 얹는다.
+// 타이틀 (10문서 1-3절): 노을 진 온실 한 장면 + 이어하기 · 새로 시작 · 게임 방법 · 설정 · 만든 사람들.
+// 아무 데나 눌러도 이어하기. 로고는 글자마다 떨어지며 등장하고, 정 · 원 의 ㅇ 은 깜빡이며 커서를 보는 '점 눈'이다.
 
 import Phaser from 'phaser';
 import { FX } from '../art/FxTextures';
+import { buildTitleClouds } from '../art/TitleBackdrop';
+import { TitleLogo } from './TitleLogoView';
 import { RAMPS, SPECIAL } from '../art/palette';
 import { Rng } from '../core/Rng';
 import { startNewGame } from '../core/Services';
@@ -10,7 +12,9 @@ import { giveStarterKit } from '../systems/economy/Starter';
 import { t } from '../i18n';
 import { Button } from '../ui/Button';
 import { applySafeArea, setBackdrop } from '../ui/Layout';
-import { outlinedText, pixelText } from '../ui/PixelText';
+import { pixelText } from '../ui/PixelText';
+import { howToPlayModal } from '../ui/HowToPlay';
+import { iconTexture } from '../ui/IconTex';
 import { creditsModal, settingsModal } from '../ui/SettingsPanel';
 import { getApp } from './context';
 import { overlay } from './UIOverlay';
@@ -47,6 +51,8 @@ export class TitleScene extends Phaser.Scene {
   private twinkles: Twinkle[] = [];
   private hint: Phaser.GameObjects.Container | undefined;
   private canContinue = false;
+  private clouds: Phaser.GameObjects.TileSprite | undefined;
+  private logo: TitleLogo | undefined;
 
   constructor() {
     super('Title');
@@ -61,22 +67,12 @@ export class TitleScene extends Phaser.Scene {
     this.twinkles = [];
 
     this.add.image(-80, 0, 'title:backdrop').setOrigin(0, 0);
+    if (!this.textures.exists('title:clouds')) buildTitleClouds().toTexture(this, 'title:clouds');
+    this.clouds = this.add.tileSprite(-80, 0, 800, 170, 'title:clouds').setOrigin(0, 0);
     this.buildAmbient();
 
-    // 로고
-    outlinedText(this, 320, 40, t('game.logo'), {
-      size: 14,
-      color: SPECIAL.PAPER,
-      anchorX: 0.5,
-      outline: RAMPS.R5[0],
-    });
-    outlinedText(this, 320, 64, t('game.subtitle'), {
-      size: 11,
-      bold: true,
-      color: RAMPS.R9[4],
-      anchorX: 0.5,
-      outline: RAMPS.R5[0],
-    });
+    // 로고: 글자 타이포그래피 + 리본 부제
+    this.logo = new TitleLogo(this, 320, 12, t('game.subtitle'));
 
     // 배경 전체를 누르면 이어하기 (버튼은 위에 있어 먼저 반응한다)
     const status = services.loadResult.status;
@@ -127,6 +123,15 @@ export class TitleScene extends Phaser.Scene {
       { key: 'title.settings', fn: () => this.openSettings() },
       { key: 'title.credits', fn: () => overlay(this).openModal(creditsModal()) },
     ];
+    // 게임 방법: 오른쪽 위 따로(첫 화면의 큰 버튼 줄은 그대로 두고 언제든 다시 볼 수 있게)
+    new Button(this, 590, 18, {
+      w: 84,
+      h: 18,
+      size: 9,
+      label: t('title.howTo'),
+      icon: iconTexture(this, 'book'),
+      onClick: () => overlay(this).openModal(howToPlayModal()),
+    });
     const total = labels.length * w + (labels.length - 1) * gap;
     labels.forEach((b, i) => {
       new Button(this, 320 - total / 2 + w / 2 + i * (w + gap), BUTTON_Y, {
@@ -147,7 +152,7 @@ export class TitleScene extends Phaser.Scene {
       anchorX: 0.5,
       anchorY: 0.5,
     });
-    this.hint = this.add.container(320, 150, [label]);
+    this.hint = this.add.container(320, 166, [label]);
     // 알파 페이드 대신 켜졌다 꺼지는 단계식 깜빡임(팔레트 안의 색만 쓰기 위해)
     this.time.addEvent({
       delay: 700,
@@ -183,9 +188,14 @@ export class TitleScene extends Phaser.Scene {
     });
   }
 
+  /** 새 게임: 먼저 '게임 방법'(키우기 → 지키기 → 모으기)을 보여 주고 정원으로 */
   private beginNewGame(): void {
-    startNewGame(getApp(this).services, '', giveStarterKit);
-    overlay(this).transitionTo('Title', 'Hub');
+    overlay(this).openModal(
+      howToPlayModal(() => {
+        startNewGame(getApp(this).services, '', giveStarterKit);
+        overlay(this).transitionTo('Title', 'Hub');
+      }),
+    );
   }
 
   private openSettings(): void {
@@ -236,6 +246,8 @@ export class TitleScene extends Phaser.Scene {
 
   override update(time: number, delta: number): void {
     const dt = delta / 1000;
+    if (this.clouds) this.clouds.tilePositionX = Math.floor(time / 170) % 800;
+    this.logo?.update(time, this.input.activePointer.x);
     for (const m of this.motes) {
       m.x += m.vx * dt;
       m.y += m.vy * dt;

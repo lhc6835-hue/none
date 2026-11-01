@@ -20,6 +20,7 @@ import { applySafeArea, setBackdrop } from '../ui/Layout';
 import { Tooltip } from '../ui/Tooltip';
 import { getApp } from './context';
 import { HubHud } from './hub/HubHud';
+import { HubGoal } from './hub/HubGoal';
 import { HubSky } from './hub/HubSky';
 import { PlantSpot } from './hub/PlantSpot';
 import { cheatModal } from './hub/HubCheats';
@@ -52,6 +53,7 @@ export class HubScene extends Phaser.Scene {
   tooltip!: Tooltip;
   spots: PlantSpot[] = [];
   pan = START_PAN;
+  goal: HubGoal | undefined;
   vel = 0;
   press: Press | null = null;
   drag: Drag | null = null;
@@ -117,6 +119,7 @@ export class HubScene extends Phaser.Scene {
       onSoon: (feature) => this.soon(feature),
       onArrow: (dir) => this.glide(dir * 320),
     });
+    this.goal = new HubGoal(this);
     this.applyPan(this.pan);
 
     // 입력
@@ -224,6 +227,7 @@ export class HubScene extends Phaser.Scene {
     for (const s of this.spots) {
       if (s.plant) s.sync(this.session.envOf(s.plant));
     }
+    this.goal?.refresh();
   }
 
   refreshAfterUnlock(): void {
@@ -330,6 +334,7 @@ export class HubScene extends Phaser.Scene {
   // ===== 연출 =====
   // ===== 프레임 =====
   override update(time: number, delta: number): void {
+    this.goal?.update(time);
     // 정원 진행
     const report = this.session.advance();
     if (report) this.afterOffline(report);

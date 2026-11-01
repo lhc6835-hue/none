@@ -23,6 +23,7 @@ import { drainEvents } from './BattleEvents';
 import { BattleView } from './BattleView';
 import { FxLayer, MAP_X, MAP_Y, TILE, px, py } from './FxLayer';
 import * as banners from './BattleBanners';
+import { BattleFlow } from './BattleFlow';
 import { setupDemo, tickDemo } from './BattleDemo';
 import * as ending from './BattleEnding';
 
@@ -58,6 +59,7 @@ export class BattleScene extends Phaser.Scene {
   ended = false;
   lastHitSfx = 0;
   skipBanner = false;
+  flow!: BattleFlow;
   /** 이번 판에 실제로 심은 식물(uid → 기여) */
   placedUids = new Set<string>();
   selectedCard = -1;
@@ -118,6 +120,7 @@ export class BattleScene extends Phaser.Scene {
 
     this.fx = new FxLayer(this);
     this.view = new BattleView(this, this.sim, this.fx);
+    this.flow = new BattleFlow(this, this.sim, stage.chapter === 1 && !data.demo);
     this.hud = new BattleHud(this, this.sim, {
       onCard: (i) => this.pickCard(i),
       onTool: (s) => this.pickTool(s),
@@ -419,6 +422,7 @@ export class BattleScene extends Phaser.Scene {
     if (this.sim.towers.length && Math.floor(time / 700) !== Math.floor((time - delta) / 700))
       this.view.lookAll();
     this.view.sync(time);
+    this.flow.update(time);
     this.fx.update(dt);
     this.hud.update();
     const shaking = this.time.now < this.shakeUntil;

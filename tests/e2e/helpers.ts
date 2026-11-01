@@ -208,6 +208,38 @@ function loadStrings(lang: 'ko' | 'en'): Record<string, string> {
 export const ko = loadStrings('ko');
 export const en = loadStrings('en');
 
+/**
+ * 새 게임을 시작하면 '게임 방법'(키우기 → 지키기 → 모으기) 창이 먼저 뜬다. 그 창이 보이는지 확인하고
+ * '알겠어요!'를 눌러 정원으로 넘어간다. press 를 넘기면 그 함수로 누른다(휴대폰 e2e 의 손가락 탭).
+ */
+export async function passHowTo(
+  page: Page,
+  press: (page: Page, x: number, y: number) => Promise<void> = clickGame,
+): Promise<void> {
+  await page.waitForFunction(
+    (title) => {
+      const sc = (
+        window.__dotline!.game as unknown as {
+          scene: { getScene(k: string): { children: { list: unknown[] } } };
+        }
+      ).scene.getScene('UIOverlay');
+      const has = (list: unknown[]): boolean =>
+        list.some((o) => {
+          const n = o as { type?: string; text?: string; list?: unknown[]; visible?: boolean };
+          if (n.visible === false) return false;
+          if (n.type === 'Text' && n.text === title) return true;
+          return Array.isArray(n.list) && has(n.list);
+        });
+      return has(sc.children.list);
+    },
+    ko['howto.title'],
+    { timeout: 10_000 },
+  );
+  await page.waitForTimeout(300); // 모달 열림 애니메이션(크기 1)
+  const ok = await findButton(page, 'UIOverlay', ko['howto.ok']);
+  await press(page, ok.x, ok.y);
+}
+
 /** 허브에서 설정 창(톱니바퀴)을 열고 '타이틀로'를 눌러 타이틀로 돌아간다. */
 export async function backToTitle(page: Page): Promise<void> {
   await clickGame(page, 588, 17);

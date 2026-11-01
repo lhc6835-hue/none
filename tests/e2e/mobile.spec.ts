@@ -2,7 +2,7 @@
 // 휴대폰(터치) 환경: 세로로 들어도 화면이 크게 나오고(90° 돌려 표시), 손가락 좌표가 정확히 맞는지, 작은 가로 화면도 꽉 차는지.
 import { devices, expect, test, type Page } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
-import { bootToTitle, findButton, gamePoint, ko, waitForScene } from './helpers';
+import { bootToTitle, findButton, gamePoint, ko, passHowTo, waitForScene } from './helpers';
 
 const SHOT_DIR = 'docs/screenshots';
 mkdirSync(SHOT_DIR, { recursive: true });
@@ -73,6 +73,7 @@ test.describe('휴대폰 화면', () => {
 
       // 2) 손가락으로 새로 시작 → 정원
       await tap(page, 268, 332);
+      await passHowTo(page, tap);
       await waitForScene(page, 'Hub');
       await page.evaluate(() => {
         const d = window.__dotline as any;

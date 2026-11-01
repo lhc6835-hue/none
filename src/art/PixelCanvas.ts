@@ -52,6 +52,12 @@ export class PixelCanvas {
     return this.rect(x, y, 1, len, color);
   }
 
+  /** 지우기(투명으로 되돌림) */
+  erase(x: number, y: number, w: number, h: number): this {
+    this.ctx.clearRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+    return this;
+  }
+
   /** 1px 테두리 사각형 */
   frame(x: number, y: number, w: number, h: number, color: string): this {
     this.hline(x, y, w, color);

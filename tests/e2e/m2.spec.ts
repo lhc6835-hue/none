@@ -11,6 +11,7 @@ import {
   findButton,
   gamePoint,
   ko,
+  passHowTo,
   settle,
   strayColors,
   visibleTexts,
@@ -35,6 +36,7 @@ function watchConsole(page: Page): string[] {
 async function newGame(page: Page): Promise<void> {
   await bootToTitle(page);
   await clickGame(page, 268, 332); // 새로 시작
+  await passHowTo(page);
   await waitForScene(page, 'Hub');
 }
 

@@ -18,7 +18,7 @@ export const TILE_KINDS: readonly TileKind[] = [
 export const TILE_SIZE = 24;
 export const TILE_VARIANTS = 4;
 
-interface Theme {
+export interface Theme {
   floor: Ramp;
   floorSpeck: string;
   path: Ramp;
@@ -26,7 +26,7 @@ interface Theme {
 }
 
 /** 챕터 1–7 의 바닥 · 길 (02문서 9절 표) */
-const THEMES: Record<number, Theme> = {
+export const TILE_THEMES: Record<number, Theme> = {
   1: { floor: RAMPS.R1, floorSpeck: RAMPS.R1[3], path: RAMPS.R10, pathSpeck: RAMPS.R10[4] },
   2: { floor: RAMPS.R2, floorSpeck: RAMPS.R3[3], path: RAMPS.R10, pathSpeck: RAMPS.R2[3] },
   3: { floor: RAMPS.R2, floorSpeck: RAMPS.R5[3], path: RAMPS.R10, pathSpeck: RAMPS.R10[1] },
@@ -37,7 +37,7 @@ const THEMES: Record<number, Theme> = {
 };
 
 export function generateTile(chapter: number, kind: TileKind, variant: number): ColorGrid {
-  const t = THEMES[chapter] ?? THEMES[1];
+  const t = TILE_THEMES[chapter] ?? TILE_THEMES[1];
   const rng = new Rng(`art:tile:${chapter}:${kind}:${variant}`);
   const g = emptyColorGrid(TILE_SIZE, TILE_SIZE);
   const put = (x: number, y: number, c: string) => {

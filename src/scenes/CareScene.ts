@@ -7,7 +7,7 @@ import { objectTextures } from '../art/HubObjects';
 import { gridToCanvas } from '../art/GridCanvas';
 import { phaseAt, skyTexture } from '../art/HubArt';
 import { generatePot } from '../art/PotSpriteGen';
-import { RAMPS, SPECIAL, toInt } from '../art/palette';
+import { RAMPS, SPECIAL } from '../art/palette';
 import type { Stage } from '../art/bodies/Ctx';
 import { localParts } from '../core/Clock';
 import type { GameState } from '../core/GameState';
@@ -28,6 +28,7 @@ import { ensurePanel } from '../ui/Frames';
 import { Gauge } from '../ui/Gauge';
 import { iconTexture } from '../ui/IconTex';
 import { applySafeArea, setBackdrop } from '../ui/Layout';
+import { buildCareBackdrop, buildCareFront, CARE_WINDOW } from '../art/CareBackdrop';
 import { NameInput } from '../ui/NameInput';
 import { numberText } from '../ui/NumberFont';
 import { PlantView } from '../ui/PlantView';
@@ -288,39 +289,18 @@ export class CareScene extends Phaser.Scene implements CareHost {
 
   // ===== 배경 · 식물 =====
   drawBackground(): void {
-    const g = this.add.graphics().setDepth(0);
-    g.fillStyle(toInt(RAMPS.R10[1]), 1).fillRect(-80, 0, 800, 360);
-    for (let y = 0; y < 250; y += 2)
-      for (let x = -80 + (y % 4); x < 720; x += 4)
-        g.fillStyle(toInt(RAMPS.R10[0]), 1).fillRect(x, y, 1, 1);
+    if (!this.textures.exists('care:room')) buildCareBackdrop().toTexture(this, 'care:room');
+    if (!this.textures.exists('care:roomFront')) buildCareFront().toTexture(this, 'care:roomFront');
+    this.add.image(-80, 0, 'care:room').setOrigin(0, 0).setDepth(0);
     // 창: 지금 하늘이 보인다
     const phase = phaseAt(localParts(this.session.now()).hourFloat);
+    const w = CARE_WINDOW;
     const sky = this.add
-      .image(512 - 180, 52 - 40, skyTexture(this, phase, false))
+      .image(w.x - 180, w.y - 40, skyTexture(this, phase, false))
       .setOrigin(0, 0)
       .setDepth(1);
-    sky.setCrop(180, 40, 96, 72);
-    g.fillStyle(toInt(RAMPS.R10[3]), 1)
-      .fillRect(508, 48, 104, 4)
-      .fillRect(508, 124, 104, 4)
-      .fillRect(508, 48, 4, 80)
-      .fillRect(608, 48, 4, 80)
-      .fillRect(558, 52, 4, 72);
-    // 바닥 · 받침대
-    g.fillStyle(toInt(RAMPS.R10[2]), 1).fillRect(-80, 290, 800, 70);
-    g.fillStyle(toInt(RAMPS.R10[3]), 1).fillRect(-80, 290, 800, 2);
-    g.fillStyle(toInt(RAMPS.R10[3]), 1).fillRect(PX - 90, PY, 180, 8);
-    g.fillStyle(toInt(RAMPS.R10[1]), 1).fillRect(PX - 90, PY + 8, 180, 3);
-    g.fillStyle(toInt(RAMPS.R10[2]), 1)
-      .fillRect(PX - 82, PY + 11, 6, 28)
-      .fillRect(PX + 76, PY + 11, 6, 28);
-    g.setDepth(0);
-    // 소품
-    this.add
-      .image(PX + 96, PY + 8, 'hub:phono0')
-      .setOrigin(0.5, 1)
-      .setDepth(1)
-      .setVisible(false);
+    sky.setCrop(180, 40, w.w, w.h);
+    this.add.image(-80, 0, 'care:roomFront').setOrigin(0, 0).setDepth(2);
   }
 
   potTexture(): string {
