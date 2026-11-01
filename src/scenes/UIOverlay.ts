@@ -9,13 +9,11 @@ import { applySafeArea } from '../ui/Layout';
 import { Modal, type ModalDef } from '../ui/Modal';
 import { ensurePanel } from '../ui/Frames';
 import { pixelText } from '../ui/PixelText';
-import { SoilDissolve } from '../ui/Transitions';
 import { getApp } from './context';
 
 export const OVERLAY_KEY = 'UIOverlay';
 
 const SPROUT_KEY = 'ui:save-sprout';
-const TRANSITION_MS = 150; // 덮기 150 + 걷기 150 = 300ms
 
 function ensureSprout(scene: Phaser.Scene): string {
   if (scene.textures.exists(SPROUT_KEY)) return SPROUT_KEY;
@@ -40,7 +38,6 @@ function ensureSprout(scene: Phaser.Scene): string {
 
 export class UIOverlay extends Phaser.Scene {
   private modal!: Modal;
-  private dissolve!: SoilDissolve;
   private transitioning = false;
   private saveIcon!: Phaser.GameObjects.Image;
   private toastHolder: Phaser.GameObjects.Container | undefined;
@@ -53,7 +50,6 @@ export class UIOverlay extends Phaser.Scene {
   create(): void {
     applySafeArea(this);
     this.modal = new Modal(this);
-    this.dissolve = new SoilDissolve(this);
 
     // 전환 중에는 아래 장면이 입력을 받지 못하게 막는다
     this.inputShield = this.add.zone(-80, 0, 800, 360).setOrigin(0, 0).setDepth(999);
@@ -90,12 +86,15 @@ export class UIOverlay extends Phaser.Scene {
     if (this.transitioning) return;
     this.transitioning = true;
     this.inputShield.setInteractive();
-    this.dissolve.cover(TRANSITION_MS, () => {
+    // 깔끔한 전환: 화면 전체를 짙은 남색으로 부드럽게 덮었다가 걷는다(220ms + 220ms)
+    const cam = this.cameras.main;
+    cam.fadeOut(220, 26, 42, 75);
+    cam.once('camerafadeoutcomplete', () => {
       this.game.scene.stop(from);
       this.game.scene.start(to, data);
-      // 새 장면이 첫 프레임을 그릴 시간을 한 틱 주고 걷는다
       this.time.delayedCall(40, () => {
-        this.dissolve.uncover(TRANSITION_MS, () => {
+        cam.fadeIn(220, 26, 42, 75);
+        cam.once('camerafadeincomplete', () => {
           this.transitioning = false;
           this.inputShield.disableInteractive();
         });
