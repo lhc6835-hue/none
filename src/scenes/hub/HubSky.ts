@@ -145,20 +145,8 @@ export class HubSky {
     const scale = q === 'HIGH' ? 1 : q === 'MID' ? 0.6 : 0.3;
     if (weather === 'RAIN') {
       for (let i = 0; i < Math.round(80 * scale); i++) this.addDrop('hub:rain', rng, 90, 260, add);
-    } else if (weather === 'SNOW') {
-      for (let i = 0; i < Math.round(60 * scale); i++) this.addDrop('hub:snow', rng, 20, 40, add);
-    } else if (weather === 'FOG') {
-      for (let i = 0; i < 2; i++) {
-        this.fog.push(
-          add(
-            scene.add
-              .image(-80 + i * 800, 0, 'hub:fog')
-              .setOrigin(0, 0)
-              .setDepth(DEPTH.weather + 1),
-          ),
-        );
-      }
     }
+    // 눈 · 안개 입자는 화면 전체에 흰 점이 깔려 보여서 뺐다(구름 수로만 날씨를 표현)
   }
 
   private addDrop(

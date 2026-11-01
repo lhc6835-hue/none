@@ -218,17 +218,6 @@ export class TitleScene extends Phaser.Scene {
       this.twinkles.push({ sprite, period: rng.int(900, 1700), offset: rng.int(0, 1500) });
     }
 
-    for (let i = 0; i < 26; i++) {
-      const sprite = this.add.image(0, 0, FX.mote).setOrigin(0, 0);
-      this.motes.push({
-        sprite,
-        x: rng.range(-80, 720),
-        y: rng.range(100, 330),
-        vx: rng.range(2, 7),
-        vy: rng.range(-5, -1),
-      });
-    }
-
     for (let i = 0; i < 14; i++) {
       this.fireflies.push({
         sprite: this.add.image(0, 0, FX.firefly).setOrigin(0.5),

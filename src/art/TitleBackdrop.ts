@@ -34,7 +34,7 @@ function drawSky(c: PixelCanvas): void {
 }
 
 function drawStars(c: PixelCanvas, rng: Rng): void {
-  for (let i = 0; i < 46; i++) {
+  for (let i = 0; i < 12; i++) {
     const x = rng.int(0, BACKDROP_W - 1);
     const y = rng.int(2, 110);
     const color = y < 50 ? SPECIAL.PAPER : RAMPS.R5[4];
@@ -75,7 +75,6 @@ function drawGreenhouse(c: PixelCanvas): void {
   const frameLight = RAMPS.R11[2];
   const glass = RAMPS.R4[3];
   const glassDark = RAMPS.R4[2];
-  const glow = RAMPS.R9[4];
   const warm = RAMPS.R8[4];
 
   // 날개(양옆 낮은 건물) + 본관(가운데 높은 건물)
@@ -87,8 +86,8 @@ function drawGreenhouse(c: PixelCanvas): void {
   for (const p of parts) {
     // 유리 벽: 안쪽에서 새어 나오는 따뜻한 불빛(디더링)
     c.rect(p.x, p.top, p.w, baseY - p.top, glassDark);
-    c.dither(p.x + 1, p.top + 1, p.w - 2, baseY - p.top - 2, glass, glow, 0);
-    c.dither(p.x + 1, p.top + (baseY - p.top) / 2, p.w - 2, (baseY - p.top) / 2 - 1, warm, glow, 1);
+    c.rect(p.x + 1, p.top + 1, p.w - 2, baseY - p.top - 2, glass);
+    c.rect(p.x + 1, p.top + (baseY - p.top) / 2, p.w - 2, (baseY - p.top) / 2 - 1, warm);
     // 철제 창살
     for (let x = p.x; x <= p.x + p.w; x += 14) c.vline(x, p.top, baseY - p.top, frame);
     for (let y = p.top; y <= baseY; y += 15) c.hline(p.x, y, p.w + 1, frame);
@@ -329,17 +328,6 @@ function drawForeground(c: PixelCanvas, rng: Rng): void {
   }
 }
 
-/** 온실 유리창에서 앞마당으로 번지는 따뜻한 불빛 */
-function drawWindowLight(c: PixelCanvas): void {
-  for (let y = 306; y < 322; y++) {
-    const spread = Math.floor((y - 306) / 2);
-    for (let x = 250 - spread; x < 550 + spread; x++) {
-      if (Math.abs(x - 400) < 14 + (y - 306)) continue;
-      if ((x + y) % 2 === 0 && (y - 306) % 4 !== 3) c.px(x, y, RAMPS.R1[3]);
-    }
-  }
-}
-
 /** 천천히 흐르는 구름 층(투명 배경). 노을을 받아 아랫면이 복숭아색, 윗면이 연보라 */
 export function buildTitleClouds(): PixelCanvas {
   const rng = new Rng('art:title:clouds');
@@ -386,7 +374,6 @@ export function buildTitleBackdrop(): PixelCanvas {
   drawHills(c, 296, 8, 21, 60, RAMPS.R1[1]);
   drawGreenhouse(c);
   drawGround(c, rng);
-  drawWindowLight(c);
   drawForeground(c, new Rng('art:title:fg'));
   return c;
 }
