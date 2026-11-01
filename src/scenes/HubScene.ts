@@ -85,6 +85,7 @@ export class HubScene extends Phaser.Scene {
       return;
     }
     this.state = services.state;
+    this.goal = undefined; // 다시 들어올 때 지난 화면의 패널(이미 지워진 객체)을 쓰지 않게
     this.session = new GardenSession(this.state, services.clock, services.bus);
     this.press = null;
     this.drag = null;
