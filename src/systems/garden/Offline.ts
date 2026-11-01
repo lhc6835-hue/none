@@ -14,7 +14,13 @@ import { worldAt } from './Environment';
 import { addGp } from './Growth';
 import { applyDecay, conditionOf, decayRates } from './Needs';
 import { baseOf, familyOf, plantEnv } from './Garden';
-import { fungusEatsMold, neighborhoodOf, rollProblems, tickProblems } from './Problems';
+import {
+  dropLockedProblems,
+  fungusEatsMold,
+  neighborhoodOf,
+  rollProblems,
+  tickProblems,
+} from './Problems';
 
 export type OfflineLine =
   | { kind: 'stageUp'; uid: string; to: number }
@@ -121,6 +127,7 @@ export function simulateOffline(state: GameState, fromMs: number, toMs: number):
       for (const ev of rollProblems(plant, base, env, nb, rng, t))
         collector.emit('plant:problem', { uid: plant.uid, kind: ev.kind });
       fungusEatsMold(plant, state.plants, familyOf);
+      dropLockedProblems(plant, state.player.level);
       for (const ev of tickProblems(plant, t))
         collector.emit('plant:problem', { uid: plant.uid, kind: ev.kind });
 

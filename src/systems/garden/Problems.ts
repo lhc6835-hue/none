@@ -4,6 +4,7 @@
 import type { Rng } from '../../core/Rng';
 import type { PlantInstance, ProblemKind, ProblemState } from '../../core/schema';
 import {
+  CARE_UNLOCK,
   HYGIENE_PER_MOLD,
   HYGIENE_PER_PEST,
   HYGIENE_PER_WITHER,
@@ -93,6 +94,26 @@ export function pestChance(plant: PlantInstance, base: PlantBase, env: PlantEnv)
 
 export interface ProblemEvent {
   kind: ProblemKind;
+}
+
+/**
+ * 아직 고칠 도구가 열리지 않은 문제(곰팡이 = 솔 Lv2 · 벌레 = 핀셋 Lv3 · 시든 잎 = 가위 Lv6)는 생기지 않게 한다.
+ * 이미 생겨 있던 것도 치우고 청결을 되돌린다. 손쓸 방법이 없는 문제를 보여 주지 않기 위해서다.
+ */
+export function dropLockedProblems(plant: PlantInstance, level: number): number {
+  const locked: [ProblemKind, number, number][] = [
+    ['MOLD', CARE_UNLOCK.SCRUB, HYGIENE_PER_MOLD],
+    ['PEST', CARE_UNLOCK.PEST, HYGIENE_PER_PEST],
+    ['WITHER', CARE_UNLOCK.PRUNE, HYGIENE_PER_WITHER],
+  ];
+  let removed = 0;
+  for (const [kind, need, hygiene] of locked) {
+    if (level >= need) continue;
+    const n = clearProblems(plant, kind);
+    if (n > 0) plant.needs.hygiene = clampNeed(plant.needs.hygiene + n * hygiene);
+    removed += n;
+  }
+  return removed;
 }
 
 /** 한 번의 10분 판정. 새로 생긴 문제를 돌려준다. */

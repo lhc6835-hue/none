@@ -23,7 +23,13 @@ import {
   derivedStatuses,
   waterRangeOf,
 } from './Needs';
-import { fungusEatsMold, neighborhoodOf, rollProblems, tickProblems } from './Problems';
+import {
+  dropLockedProblems,
+  fungusEatsMold,
+  neighborhoodOf,
+  rollProblems,
+  tickProblems,
+} from './Problems';
 import { recordCondition } from './Quality';
 
 type Emitter = Pick<EventBus<GameEvents>, 'emit'>;
@@ -206,6 +212,7 @@ export function stepPlant(
     }
   }
   plant.timers.rollBucket = bucket;
+  dropLockedProblems(plant, state.player.level);
 
   for (const ev of tickProblems(plant, now))
     bus.emit('plant:problem', { uid: plant.uid, kind: ev.kind });
