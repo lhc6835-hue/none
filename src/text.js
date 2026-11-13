@@ -1,7 +1,6 @@
 // 화면에 나오는 모든 글자. touch가 있으면 터치로 할 때 그 글을 쓴다.
 export const TEXT = {
-  title: '앰버라인',
-  subtitle: 'AMBERLINE',
+  title: 'AMBERLINE',
   story: [
     '세계수의 수액이 멈추자 하늘섬들이 서로 멀어졌어요.',
     '등불 정원사 호롱은 마지막 남은 수액으로 길을 이어요.',

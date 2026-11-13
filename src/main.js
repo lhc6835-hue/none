@@ -1,4 +1,4 @@
-// 앰버라인: 게임 루프, 화면 합성, 소품(등불·표지판·묘목), HUD, 타이틀·클리어 화면
+// AMBERLINE: 게임 루프, 화면 합성, 소품(등불·표지판·묘목), HUD, 타이틀·클리어 화면
 import { VW, VH, SCALE, LW, LH, STEP } from './config.js';
 import { Frame } from './core/frame.js';
 import { PAL, css } from './core/color.js';
@@ -13,6 +13,7 @@ import { createEnemy } from './entities/enemies.js';
 import { unstick } from './entities/body.js';
 import { createInput, BTN } from './input.js';
 import { TEXT, pick } from './text.js';
+import { Logo } from './logo.js';
 
 // ─── 캔버스 ──────────────────────────────────────────────────
 const canvas = document.getElementById('game');
@@ -24,6 +25,7 @@ const lowCtx = low.getContext('2d'), fgCtx = fgC.getContext('2d'), lightCtx = li
 const frame = new Frame(VW, VH);
 const bg = new Background();
 const input = createInput(canvas);
+const logo = new Logo();
 
 // ─── 게임 상태 ───────────────────────────────────────────────
 let G = null, mode = 'title', modeT = 0;
@@ -266,12 +268,9 @@ function drawTouchControls() {
 function drawOverlay() {
   const W = VW * SCALE, H = VH * SCALE, tm = input.touchMode;
   if (mode === 'title') {
-    mctx.fillStyle = 'rgba(10, 12, 40, 0.35)'; mctx.fillRect(0, 0, W, H);
-    const bob = Math.sin(modeT * 0.04) * 4;
-    text(TEXT.title, W / 2, H * 0.3 + bob, { size: 72, color: css(PAL.sapL[4]), align: 'center', outline: css(PAL.sapS[0]) });
-    text(TEXT.subtitle, W / 2, H * 0.3 + 54 + bob, { size: 16, color: css(PAL.cream[2]), align: 'center', weight: 'normal' });
-    TEXT.story.forEach((ln, k) => text(ln, W / 2, H * 0.55 + k * 26, { size: 16, align: 'center', weight: 'normal' }));
-    if ((modeT >> 5) & 1 || modeT < 30) text(pick(TEXT.start, tm), W / 2, H * 0.78, { size: 18, align: 'center', color: '#fff3c4' });
+    const a = Math.min(1, Math.max(0, (modeT - 120) / 40));
+    TEXT.story.forEach((ln, k) => text(ln, W / 2, H * 0.6 + k * 26, { size: 15, align: 'center', weight: 'normal', alpha: a }));
+    if (modeT > 150 && ((modeT >> 5) & 1)) text(pick(TEXT.start, tm), W / 2, H * 0.8, { size: 18, align: 'center', color: '#fff3c4' });
     return;
   }
   drawSignsText();
@@ -309,7 +308,12 @@ function render() {
   G.fx.draw(f);
   drawCloudSea(f, tick);
   bg.lights(f, f.cx, f.cy, tick);
-  if (mode !== 'title') drawHud(f, tick);
+  if (mode === 'title') {
+    // 배경을 살짝 어둡게 눌러 로고를 띄운다
+    f.cx = 0; f.cy = 0;
+    for (let y = 0; y < VH; y++) { const a = 0.32 * (1 - Math.abs(y - 80) / 200); if (a > 0) for (let x = 0; x < VW; x++) f.blend(x, y, PAL.sky[0], a); }
+    logo.draw(f, modeT, VW / 2, 74);
+  } else drawHud(f, tick);
   f.present(fgCtx, lightCtx);
 
   lowCtx.globalCompositeOperation = 'source-over';
