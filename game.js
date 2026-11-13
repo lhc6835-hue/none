@@ -149,6 +149,91 @@ canvas.addEventListener('mousedown', e => { setMouse(e); if (e.button === 0) mou
 addEventListener('mouseup', e => { if (e.button === 0) mouse.down = false; });
 canvas.addEventListener('contextmenu', e => e.preventDefault());
 
+// ─── 터치 조작 ───────────────────────────────────────────────
+// 왼쪽 아래 ◀ ▶ 이동, 오른쪽 아래 점프, 나머지 화면은 누른 곳으로 조준·발사
+let touchMode = matchMedia('(pointer: coarse)').matches;
+const touch = { left: false, right: false, jump: false };
+const pointers = new Map(); // pointerId → { role, x, y }
+const BTN = {
+  left:    { x: 74,       y: VH - 74, r: 46, label: '◀' },
+  right:   { x: 184,      y: VH - 74, r: 46, label: '▶' },
+  jump:    { x: VW - 86,  y: VH - 86, r: 56, label: '점프' },
+  restart: { x: VW - 40,  y: 40,      r: 26, label: '처음' },
+};
+function canvasPoint(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: (e.clientX - r.left) * VW / r.width, y: (e.clientY - r.top) * VH / r.height };
+}
+function hitButton(p) {
+  for (const name of ['jump', 'restart']) {
+    const b = BTN[name];
+    if (Math.hypot(p.x - b.x, p.y - b.y) < b.r + 14) return name;
+  }
+  // 이동 버튼은 손가락이 미끄러져도 놓치지 않게 넓은 직사각형으로 판정
+  if (p.x < 245 && p.y > VH - 160) return p.x < 129 ? 'left' : 'right';
+  return 'aim';
+}
+function refreshTouch() {
+  touch.left = touch.right = touch.jump = false;
+  let aiming = false;
+  for (const ptr of pointers.values()) {
+    if (ptr.role === 'left') touch.left = true;
+    else if (ptr.role === 'right') touch.right = true;
+    else if (ptr.role === 'jump') touch.jump = true;
+    else if (ptr.role === 'aim') { aiming = true; mouse.x = ptr.x; mouse.y = ptr.y; }
+  }
+  mouse.down = aiming;
+}
+canvas.addEventListener('pointerdown', e => {
+  if (e.pointerType === 'mouse') return;
+  e.preventDefault();
+  touchMode = true;
+  canvas.setPointerCapture?.(e.pointerId);
+  if (state === 'win') { resetGame(); return; }
+  const p = canvasPoint(e);
+  const role = hitButton(p);
+  if (role === 'restart') { resetGame(); return; }
+  if (role === 'jump') jumpBuf = 6;
+  pointers.set(e.pointerId, { role, x: p.x, y: p.y });
+  refreshTouch();
+}, { passive: false });
+canvas.addEventListener('pointermove', e => {
+  const ptr = pointers.get(e.pointerId);
+  if (!ptr) return;
+  e.preventDefault();
+  const p = canvasPoint(e);
+  ptr.x = p.x; ptr.y = p.y;
+  if (ptr.role === 'left' || ptr.role === 'right') {
+    const r = hitButton(p);
+    if (r === 'left' || r === 'right') ptr.role = r;
+  }
+  refreshTouch();
+}, { passive: false });
+function endPointer(e) {
+  if (!pointers.delete(e.pointerId)) return;
+  refreshTouch();
+}
+canvas.addEventListener('pointerup', endPointer);
+canvas.addEventListener('pointercancel', endPointer);
+
+function drawTouchControls() {
+  ctx.save();
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  for (const [name, b] of Object.entries(BTN)) {
+    const on = touch[name];
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    ctx.fillStyle = on ? 'rgba(127, 242, 220, 0.35)' : 'rgba(214, 210, 245, 0.12)';
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = on ? 'rgba(127, 242, 220, 0.9)' : 'rgba(214, 210, 245, 0.35)';
+    ctx.stroke();
+    ctx.fillStyle = on ? '#e6fffb' : 'rgba(214, 210, 245, 0.75)';
+    ctx.font = `bold ${name === 'jump' ? 18 : name === 'restart' ? 14 : 24}px "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif`;
+    ctx.fillText(b.label, b.x, b.y + 1);
+  }
+  ctx.restore();
+}
+
 // ─── 충돌 ────────────────────────────────────────────────────
 function boxHits(x, y, w, h) {
   const x0 = Math.floor(x / CELL), x1 = Math.floor((x + w - 0.001) / CELL);
@@ -371,8 +456,8 @@ function updatePlayer() {
   const p = player;
   if (p.dead) { if (--p.deathT <= 0) respawn(); return; }
 
-  const left = keys.has('KeyA') || keys.has('ArrowLeft');
-  const right = keys.has('KeyD') || keys.has('ArrowRight');
+  const left = keys.has('KeyA') || keys.has('ArrowLeft') || touch.left;
+  const right = keys.has('KeyD') || keys.has('ArrowRight') || touch.right;
   const dir = (right ? 1 : 0) - (left ? 1 : 0);
   const inLiq = liquidInBox(p) > 6;
 
@@ -388,7 +473,7 @@ function updatePlayer() {
     jumpBuf = 0; p.coyote = 0; p.onGround = false;
     for (let k = 0; k < 5; k++) spawnParticle(p.x + 6, p.y + p.h, (Math.random() - 0.5) * 2, -Math.random(), 14, '#d9d4ff', 0.05);
   }
-  const jumpHeld = JUMP_KEYS.some(k => keys.has(k));
+  const jumpHeld = JUMP_KEYS.some(k => keys.has(k)) || touch.jump;
   p.vy += GRAVITY * (p.vy < 0 && !jumpHeld ? 2.2 : 1);
   if (inLiq) p.vy = Math.min(p.vy, 2.5);
   p.vy = Math.min(p.vy, MAX_FALL);
@@ -630,6 +715,10 @@ function drawTerrain() {
   ctx.drawImage(terrainCanvas, -Math.round(camX), 0, GW * CELL, GH * CELL);
 }
 
+const TOUCH_SIGN = {
+  'A/D 이동 · W/스페이스 점프': '◀ ▶ 버튼으로 이동 · 점프 버튼으로 점프',
+  '마우스로 조준하고 클릭하면 액체를 쏴요': '화면을 누르면 그쪽으로 액체를 쏴요',
+};
 function drawSigns() {
   ctx.font = '13px "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
   ctx.textBaseline = 'top';
@@ -637,6 +726,7 @@ function drawSigns() {
     const x = Math.round(s.tx * TILE - camX), y = s.ty * TILE;
     if (x > VW || x < -420) continue;
     s.lines.forEach((line, k) => {
+      if (touchMode && TOUCH_SIGN[line]) line = TOUCH_SIGN[line];
       ctx.fillStyle = '#0b0b18'; ctx.fillText(line, x + 1, y + k * 17 + 1);
       ctx.fillStyle = '#d6d2f5'; ctx.fillText(line, x, y + k * 17);
     });
@@ -777,7 +867,14 @@ function drawHud() {
     ctx.fillRect(84 + k * 18, 39, 12, 10);
   }
   ctx.fillStyle = 'rgba(214, 210, 245, 0.6)';
-  ctx.fillText('A/D 이동 · W/스페이스 점프 · 마우스 조준 · 클릭 발사 · R 처음부터', 14, VH - 22);
+  if (touchMode) {
+    ctx.textAlign = 'center';
+    ctx.fillText('화면을 누른 곳으로 액체를 쏴요 · 누르고 있으면 연사', VW / 2, VH - 22);
+    ctx.textAlign = 'left';
+    if (state !== 'win') drawTouchControls();
+  } else {
+    ctx.fillText('A/D 이동 · W/스페이스 점프 · 마우스 조준 · 클릭 발사 · R 처음부터', 14, VH - 22);
+  }
 
   if (state === 'win') {
     ctx.fillStyle = 'rgba(8, 8, 20, 0.7)'; ctx.fillRect(0, 0, VW, VH);
@@ -787,7 +884,7 @@ function drawHud() {
     ctx.font = '16px "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
     ctx.fillStyle = '#d6d2f5';
     ctx.fillText(`걸린 시간 ${((winTick - startTick) / 60).toFixed(1)}초`, VW / 2, VH / 2 + 4);
-    ctx.fillText('R 키를 누르면 처음부터 다시 해요', VW / 2, VH / 2 + 30);
+    ctx.fillText(touchMode ? '화면을 누르면 처음부터 다시 해요' : 'R 키를 누르면 처음부터 다시 해요', VW / 2, VH / 2 + 30);
     ctx.textAlign = 'left';
   }
 }
@@ -805,6 +902,13 @@ function render() {
   drawAimPreview();
   ctx.restore();
   drawHud();
+  if (touchMode && innerHeight > innerWidth) {
+    ctx.fillStyle = 'rgba(8, 8, 20, 0.85)'; ctx.fillRect(0, 0, VW, VH);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = 'bold 36px "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+    ctx.fillStyle = '#d6d2f5'; ctx.fillText('휴대폰을 가로로 돌려주세요', VW / 2, VH / 2);
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  }
 }
 
 // ─── 루프 ────────────────────────────────────────────────────

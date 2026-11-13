@@ -2,17 +2,26 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0e0f1c">
 <title>굳는 액체 시제품</title>
 <style>
-  html, body { margin: 0; height: 100%; background: #0e0f1c; }
-  body { display: flex; align-items: center; justify-content: center; }
+  html, body {
+    margin: 0; height: 100%; background: #0e0f1c;
+    overflow: hidden; overscroll-behavior: none;
+    touch-action: none; user-select: none; -webkit-user-select: none;
+    -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+  }
+  body { display: flex; align-items: center; justify-content: center; height: 100dvh; }
   canvas {
-    width: min(100vw, calc(100vh * 960 / 544));
+    width: min(100vw, calc(100dvh * 960 / 544));
     height: auto;
     image-rendering: pixelated;
     cursor: crosshair;
     display: block;
+    touch-action: none;
   }
 </style>
 </head>
